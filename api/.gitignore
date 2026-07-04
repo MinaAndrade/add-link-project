@@ -1,0 +1,25 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.*.local
+
+# Build
+dist*
+build/
+
+# Drizzle
+drizzle/*.sqlite
+drizzle/*.db
+drizzle/migrations/*.lock
+
+# Logs
+*.log
+logs/
+
+# Docker
+docker-data/
+pgdata/
