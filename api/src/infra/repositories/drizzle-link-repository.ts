@@ -1,10 +1,10 @@
 import { eq } from "drizzle-orm";
 
-import { Link } from "@/app/entities/Link";
+import { Link } from "@/app/entities/link";
 import {
   CreateLinkDTO,
   LinkRepository,
-} from "@/app/repositories/LinkRepository";
+} from "@/app/repositories/link-repository";
 
 import { db } from "../db/connections";
 import { links } from "../db/schema/links";
