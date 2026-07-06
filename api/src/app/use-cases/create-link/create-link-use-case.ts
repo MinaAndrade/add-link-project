@@ -1,20 +1,15 @@
 import { uuidv7 } from 'uuidv7';
 
-import { Link } from '../entities/link';
-import { LinkRepository } from '../repositories/link-repository';
+import { Link } from '../../entities/link';
+import { LinkRepository } from '../../repositories/link-repository';
 
 import { generateShortCode } from '@/shared/utils/generate-short-code';
-import { InvalidUrlError } from '../errors/invalid-url-error';
 
 export class CreateLinkUseCase {
   constructor(private readonly repository: LinkRepository) {}
 
   async execute(originalUrl: string): Promise<Link> {
-    try {
-      new URL(originalUrl);
-    } catch {
-      throw new InvalidUrlError();
-    }
+    new URL(originalUrl);
 
     let shortCode = generateShortCode();
 

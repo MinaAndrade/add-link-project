@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
-import { InvalidUrlError } from '@/app/errors/invalid-url-error';
 import { makeCreateLinkUseCase } from '../factories/make-create-link-use-case';
 
 const bodySchema = z.object({

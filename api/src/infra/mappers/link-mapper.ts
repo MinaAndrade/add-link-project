@@ -1,4 +1,4 @@
-import { Link } from "@/app/entities/link";
+import { Link } from '@/app/entities/link';
 
 export class LinkMapper {
   static toDomain(data: Link): Link {

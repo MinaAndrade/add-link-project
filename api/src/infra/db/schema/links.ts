@@ -17,6 +17,4 @@ export const links = pgTable('links', {
   accessCount: integer('access_count').default(0).notNull(),
 
   createdAt: timestamp('created_at').defaultNow().notNull(),
-
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
