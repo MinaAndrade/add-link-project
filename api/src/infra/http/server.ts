@@ -1,9 +1,12 @@
 import Fastify from 'fastify';
 import { linksRoutes } from './routes/link-routes';
 import { registerErrorHandler } from './error-handler';
+import { registerSwagger } from '../swagger';
 
 async function bootstrap() {
   const app = Fastify();
+
+  await registerSwagger(app);
 
   await app.register(linksRoutes);
 
