@@ -1,5 +1,6 @@
 import { CreateLinkForm } from "./components/create-link-form";
 import { LinksTable } from "./components/links-table";
+import { ReportButton } from "./components/report-button";
 
 export function App() {
   return (
@@ -11,6 +12,8 @@ export function App() {
       <CreateLinkForm />
 
       <LinksTable />
+
+      <ReportButton />
     </main>
   );
 }
