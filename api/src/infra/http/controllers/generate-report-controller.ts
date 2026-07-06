@@ -8,11 +8,11 @@ export async function generateReportController(
 ) {
   const useCase = makeGenerateReportUseCase();
 
-  const csv = await useCase.execute();
+  const result = await useCase.execute();
 
   reply
     .header('Content-Type', 'text/csv')
     .header('Content-Disposition', 'attachment; filename="links-report.csv"');
 
-  return reply.send(csv);
+  return reply.send(result);
 }
