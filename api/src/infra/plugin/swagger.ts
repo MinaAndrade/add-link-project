@@ -5,10 +5,11 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 export async function registerSwagger(app: FastifyInstance) {
   await app.register(fastifySwagger, {
     openapi: {
+      openapi: '3.0.0',
       info: {
         title: 'Add Link API',
-        description: 'API para encurtamento de links',
         version: '1.0.0',
+        description: 'API de encurtamento de links',
       },
     },
   });
