@@ -1,4 +1,4 @@
-import { Link } from "../entities/link"
+import { Link } from '../entities/link';
 
 export interface CreateLinkDTO {
   id: string;
@@ -7,15 +7,15 @@ export interface CreateLinkDTO {
 }
 
 export interface LinkRepository {
-  create(data: CreateLinkDTO): Promise<Link>
+  create(data: CreateLinkDTO): Promise<Link>;
 
-  findById(id: string): Promise<Link | null>
+  findById(id: string): Promise<Link | null>;
 
-  findByShortCode(shortCode: string): Promise<Link |null>
+  findByShortCode(shortCode: string): Promise<Link | null>;
 
-  findAll(): Promise<Link[]>
+  findAll(): Promise<Link[]>;
 
-  delete(id: string): Promise<void>
+  delete(id: string): Promise<void>;
 
-  incrementAccessCount(id: string): Promise<void>
+  incrementAccessCount(id: string): Promise<void>;
 }

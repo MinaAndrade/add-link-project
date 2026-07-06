@@ -1,5 +1,7 @@
-export class ShortCodeAlreadyExistsError extends Error {
+import { AppError } from './app-error';
+
+export class ShortCodeAlreadyExistsError extends AppError {
   constructor() {
-    super("Short code already exists");
+    super('Short code already exists', 409);
   }
 }

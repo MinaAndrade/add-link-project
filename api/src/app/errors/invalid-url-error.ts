@@ -1,5 +1,7 @@
-export class InvalidUrlError extends Error {
+import { AppError } from './app-error';
+
+export class InvalidUrlError extends AppError {
   constructor() {
-    super("Invalid URL");
+    super('Invalid URL', 400);
   }
 }
