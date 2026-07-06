@@ -1,25 +1,16 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchLinks } from "../http/fetch-links";
 
-interface Link {
-  id: string;
-  originalUrl: string;
-  shortCode: string;
-  accessCount: number;
-}
 
 export function LinksTable() {
-  const [links, setLinks] = useState<Link[]>([]);
+  const { data = [], isLoading } = useQuery({
+    queryKey: ["links"],
+    queryFn: fetchLinks,
+  });
 
-  async function loadLinks() {
-    const data = await fetchLinks();
-
-    setLinks(data);
+  if (isLoading) {
+    return <p>Carregando...</p>;
   }
-
-  useEffect(() => {
-    loadLinks();
-  }, []);
 
   return (
     <table className="mt-8 w-full border-collapse">
@@ -32,12 +23,10 @@ export function LinksTable() {
       </thead>
 
       <tbody>
-        {links.map((link) => (
+        {data.map((link: any) => (
           <tr key={link.id}>
             <td>{link.originalUrl}</td>
-
             <td>{link.shortCode}</td>
-
             <td>{link.accessCount}</td>
           </tr>
         ))}

@@ -1,15 +1,24 @@
 import { FormEvent, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createLink } from "../http/create-link";
 
-interface Props {
-  onCreated: () => void;
-}
 
-export function CreateLinkForm({ onCreated }: Props) {
+export function CreateLinkForm() {
   const [originalUrl, setOriginalUrl] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(event: FormEvent) {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createLink,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["links"],
+      });
+    },
+  });
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!originalUrl.trim()) {
@@ -17,17 +26,14 @@ export function CreateLinkForm({ onCreated }: Props) {
     }
 
     try {
-      setLoading(true);
-
-      await createLink({
+      await mutateAsync({
         originalUrl,
       });
 
       setOriginalUrl("");
-
-      onCreated();
-    } finally {
-      setLoading(false);
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao criar o link.");
     }
   }
 
@@ -35,16 +41,17 @@ export function CreateLinkForm({ onCreated }: Props) {
     <form onSubmit={handleSubmit} className="flex gap-4">
       <input
         className="flex-1 rounded border p-3"
-        placeholder="https://google.com"
+        placeholder="https://www.google.com"
         value={originalUrl}
         onChange={(e) => setOriginalUrl(e.target.value)}
       />
 
       <button
-        className="rounded bg-blue-600 px-6 text-white"
-        disabled={loading}
+        type="submit"
+        className="rounded bg-blue-600 px-6 text-white disabled:opacity-50"
+        disabled={isPending}
       >
-        {loading ? "Criando..." : "Encurtar"}
+        {isPending ? "Criando..." : "Encurtar"}
       </button>
     </form>
   );
