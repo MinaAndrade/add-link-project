@@ -23,7 +23,7 @@ export function LinksTable() {
   return (
     <table className="w-full border-collapse">
       <thead>
-        <tr className="border-b">
+        <tr className="border-b text-left text-sm text-gray-500">
           <th className="py-3 text-left">URL</th>
           <th className="text-left">Código</th>
           <th className="text-left">Acessos</th>
@@ -34,7 +34,7 @@ export function LinksTable() {
         {data.map((link) => (
           <tr
             key={link.id}
-            className="border-b"
+            className="border-b transition hover:bg-gray-50"
           >
             <td className="py-4">
               {link.originalUrl}

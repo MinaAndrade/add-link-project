@@ -38,16 +38,36 @@ export function CreateLinkForm() {
       className="flex gap-4"
     >
       <input
-        className="flex-1 rounded-lg border p-3"
-        placeholder="https://google.com"
+        type="url"
+        placeholder="https://www.google.com"
         value={originalUrl}
-        onChange={(e) => setOriginalUrl(e.target.value)}
+        onChange={(event) => setOriginalUrl(event.target.value)}
+        className="
+          w-full
+          rounded-lg
+          border
+          border-gray-300
+          px-4
+          py-3
+          outline-none
+          focus:border-blue-500
+        "
       />
 
       <button
         type="submit"
         disabled={isPending}
-        className="rounded-lg bg-blue-600 px-6 py-3 text-white"
+        className="
+          rounded-lg
+          bg-blue-600
+          px-6
+          py-3
+          font-medium
+          text-white
+          transition
+          hover:bg-blue-700
+          disabled:opacity-50
+        "
       >
         {isPending ? "Criando..." : "Encurtar"}
       </button>
