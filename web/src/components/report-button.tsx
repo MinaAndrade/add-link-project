@@ -1,6 +1,6 @@
-import { Download } from "lucide-react";
+import { Download } from 'lucide-react';
 
-import { generateReport } from "../http/generate-report";
+import { generateReport } from '../http/generate-report';
 
 export function ReportButton() {
   async function handleDownload() {
@@ -8,11 +8,11 @@ export function ReportButton() {
 
     const url = URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
+    const link = document.createElement('a');
 
     link.href = url;
 
-    link.download = "links-report.csv";
+    link.download = 'links-report.csv';
 
     link.click();
 
@@ -36,7 +36,6 @@ export function ReportButton() {
       "
     >
       <Download size={18} />
-
       Baixar relatório
     </button>
   );

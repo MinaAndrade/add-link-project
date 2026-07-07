@@ -1,10 +1,10 @@
-import { type FormEvent, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { type FormEvent, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createLink } from "../http/create-link";
+import { createLink } from '../http/create-link';
 
 export function CreateLinkForm() {
-  const [originalUrl, setOriginalUrl] = useState("");
+  const [originalUrl, setOriginalUrl] = useState('');
 
   const queryClient = useQueryClient();
 
@@ -13,10 +13,10 @@ export function CreateLinkForm() {
 
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: ["links"],
+        queryKey: ['links'],
       });
 
-      setOriginalUrl("");
+      setOriginalUrl('');
     },
   });
 
@@ -33,15 +33,12 @@ export function CreateLinkForm() {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex gap-4"
-    >
+    <form onSubmit={handleSubmit} className="flex gap-4">
       <input
         type="url"
         placeholder="https://www.google.com"
         value={originalUrl}
-        onChange={(event) => setOriginalUrl(event.target.value)}
+        onChange={event => setOriginalUrl(event.target.value)}
         className="
           w-full
           rounded-lg
@@ -69,7 +66,7 @@ export function CreateLinkForm() {
           disabled:opacity-50
         "
       >
-        {isPending ? "Criando..." : "Encurtar"}
+        {isPending ? 'Criando...' : 'Encurtar'}
       </button>
     </form>
   );

@@ -1,8 +1,8 @@
-import { api } from "../lib/api";
+import { api } from '../lib/api';
 
 export async function generateReport() {
-  const response = await api.get("/links/report", {
-    responseType: "blob",
+  const response = await api.get('/links/report', {
+    responseType: 'blob',
   });
 
   return response.data;

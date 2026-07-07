@@ -1,7 +1,7 @@
 export interface Link {
-  id: string
-  originalUrl: string
-  shortCode: string
-  accessCount: number
-  createdAt: string
+  id: string;
+  originalUrl: string;
+  shortCode: string;
+  accessCount: number;
+  createdAt: string;
 }
