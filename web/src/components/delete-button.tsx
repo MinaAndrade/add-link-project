@@ -1,7 +1,7 @@
-import { Trash2 } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Trash2 } from 'lucide-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { deleteLink } from "../http/delete-link";
+import { deleteLink } from '../http/delete-link';
 
 interface Props {
   id: string;
@@ -15,15 +15,13 @@ export function DeleteButton({ id }: Props) {
 
     onSuccess() {
       queryClient.invalidateQueries({
-        queryKey: ["links"],
+        queryKey: ['links'],
       });
     },
   });
 
   async function handleDelete() {
-    const confirmed = confirm(
-      "Deseja realmente excluir este link?"
-    );
+    const confirmed = confirm('Deseja realmente excluir este link?');
 
     if (!confirmed) {
       return;
@@ -36,13 +34,10 @@ export function DeleteButton({ id }: Props) {
     <button
       onClick={handleDelete}
       disabled={isPending}
-      className="rounded p-2 transition hover:bg-red-50"
+      className="rounded-lg p-2 transition hover:bg-red-50 active:scale-95"
       title="Excluir"
     >
-      <Trash2
-        size={18}
-        className="text-red-600"
-      />
+      <Trash2 size={18} className="text-red-600" />
     </button>
   );
 }

@@ -1,26 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-import { fetchLinks } from "../http/fetch-links";
+import { fetchLinks } from '../http/fetch-links';
 
-import { CopyButton } from "./copy-button";
-import { DeleteButton } from "./delete-button";
+import { CopyButton } from './copy-button';
+import { DeleteButton } from './delete-button';
+import { EmptyState } from './empty-state';
 
 export function LinksTable() {
   const { data = [], isLoading } = useQuery({
-    queryKey: ["links"],
+    queryKey: ['links'],
     queryFn: fetchLinks,
   });
 
   if (isLoading) {
-    return <p>Carregando links...</p>;
+    return <div className="py-12 text-center">Carregando links...</div>;
   }
 
-  if (data.length === 0) {
-    return (
-      <p className="text-gray-500">
-        Nenhum link cadastrado.
-      </p>
-    );
+  if (!data.length) {
+    return <EmptyState />;
   }
 
   return (
@@ -35,16 +32,29 @@ export function LinksTable() {
       </thead>
 
       <tbody>
-        {data.map((link) => (
-          <tr
-            key={link.id}
-            className="border-b transition hover:bg-gray-50"
-          >
+        {data.map(link => (
+          <tr key={link.id} className="border-b transition hover:bg-gray-50">
             <td className="py-4">
-              {link.originalUrl}
+              <a
+                href={link.originalUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {link.originalUrl}
+              </a>
             </td>
 
-            <td>{link.shortCode}</td>
+            <td>
+              <a
+                href={`http://localhost:3333/${link.shortCode}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                {link.shortCode}
+              </a>
+            </td>
 
             <td>{link.accessCount}</td>
 

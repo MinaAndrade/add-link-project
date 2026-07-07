@@ -1,4 +1,4 @@
-import { Copy } from "lucide-react";
+import { Copy } from 'lucide-react';
 
 interface Props {
   shortCode: string;
@@ -10,13 +10,13 @@ export function CopyButton({ shortCode }: Props) {
 
     await navigator.clipboard.writeText(url);
 
-    alert("Link copiado!");
+    alert('Link copiado!');
   }
 
   return (
     <button
       onClick={handleCopy}
-      className="rounded p-2 transition hover:bg-gray-100"
+      className="rounded-lg p-2 transition hover:bg-gray-100 active:scale-95"
       title="Copiar link"
     >
       <Copy size={18} />
