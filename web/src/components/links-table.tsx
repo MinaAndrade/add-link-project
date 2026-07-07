@@ -1,37 +1,6 @@
-import { Trash2, Copy } from "lucide-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import { fetchLinks } from "../http/fetch-links";
-import { deleteLink } from "../http/delete-link";
-import { Link } from "../http/types";
-
-const queryClient = useQueryClient();
-
-const { mutateAsync } = useMutation({
-  mutationFn: deleteLink,
-
-  onSuccess: () => {
-    queryClient.invalidateQueries({
-      queryKey: ["links"],
-    });
-  },
-});
-
-async function handleDelete(id: string) {
-  if (!confirm("Excluir este link?")) {
-    return;
-  }
-
-  await mutateAsync(id);
-}
-
-async function handleCopy(shortCode: string) {
-  await navigator.clipboard.writeText(
-    `http://localhost:3333/${shortCode}`,
-  );
-
-  alert("Link copiado!");
-}
 
 export function LinksTable() {
   const { data = [], isLoading } = useQuery({
@@ -40,41 +9,40 @@ export function LinksTable() {
   });
 
   if (isLoading) {
-    return <p>Carregando...</p>;
+    return <p>Carregando links...</p>;
+  }
+
+  if (data.length === 0) {
+    return (
+      <p className="text-gray-500">
+        Nenhum link cadastrado.
+      </p>
+    );
   }
 
   return (
-    <table className="mt-8 w-full border-collapse">
+    <table className="w-full border-collapse">
       <thead>
-        <tr>
-          <th>Original</th>
-          <th>Código</th>
-          <th>Acessos</th>
-          <th>Ações</th>
+        <tr className="border-b">
+          <th className="py-3 text-left">URL</th>
+          <th className="text-left">Código</th>
+          <th className="text-left">Acessos</th>
         </tr>
       </thead>
 
       <tbody>
-        {data.map((link: Link) => (
-          <tr key={link.id}>
-            <td>{link.originalUrl}</td>
-            <td>{link.shortCode}</td>
-            <td>{link.accessCount}</td>
-            <td>
-                <div className="flex gap-2">
-                    <button
-                    onClick={() => handleCopy(link.shortCode)}
-                    >
-                    <Copy size={18} />
-                    </button>
-
-                    <button
-                    onClick={() => handleDelete(link.id)}
-                    >
-                    <Trash2 size={18} />
-                    </button>
-                </div>
+        {data.map((link) => (
+          <tr
+            key={link.id}
+            className="border-b"
+          >
+            <td className="py-4">
+              {link.originalUrl}
             </td>
+
+            <td>{link.shortCode}</td>
+
+            <td>{link.accessCount}</td>
           </tr>
         ))}
       </tbody>
