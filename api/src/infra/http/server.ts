@@ -1,10 +1,16 @@
 import Fastify from 'fastify';
+import cors from '@fastify/cors';
+
 import { linksRoutes } from './routes/link-routes';
 import { registerErrorHandler } from './error-handler';
-import { registerSwagger } from '../swagger';
+import { registerSwagger } from '../plugin/swagger';
 
 async function bootstrap() {
   const app = Fastify();
+
+  await app.register(cors, {
+    origin: true,
+  });
 
   await registerSwagger(app);
 

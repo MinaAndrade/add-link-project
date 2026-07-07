@@ -1,8 +1,8 @@
-import { api } from "./api";
-import { Link } from "./types";
+import { api } from "../lib/api";
+import { type Link } from "../types/link";
 
 export async function fetchLinks(): Promise<Link[]> {
-  const response = await api.get("/links");
+  const { data } = await api.get("/links");
 
-  return response.data;
+  return data;
 }
