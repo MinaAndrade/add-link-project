@@ -1,3 +1,5 @@
+import { Download } from "lucide-react";
+
 import { generateReport } from "../http/generate-report";
 
 export function ReportButton() {
@@ -6,13 +8,13 @@ export function ReportButton() {
 
     const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
+    const link = document.createElement("a");
 
-    a.href = url;
+    link.href = url;
 
-    a.download = "report.csv";
+    link.download = "links-report.csv";
 
-    a.click();
+    link.click();
 
     URL.revokeObjectURL(url);
   }
@@ -20,8 +22,21 @@ export function ReportButton() {
   return (
     <button
       onClick={handleDownload}
-      className="rounded bg-green-600 px-4 py-2 text-white"
+      className="
+        flex
+        items-center
+        gap-2
+        rounded-lg
+        bg-green-600
+        px-4
+        py-3
+        text-white
+        transition
+        hover:bg-green-700
+      "
     >
+      <Download size={18} />
+
       Baixar relatório
     </button>
   );

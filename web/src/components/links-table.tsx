@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 
 import { fetchLinks } from "../http/fetch-links";
 
+import { CopyButton } from "./copy-button";
+import { DeleteButton } from "./delete-button";
+
 export function LinksTable() {
   const { data = [], isLoading } = useQuery({
     queryKey: ["links"],
@@ -27,6 +30,7 @@ export function LinksTable() {
           <th className="py-3 text-left">URL</th>
           <th className="text-left">Código</th>
           <th className="text-left">Acessos</th>
+          <th className="text-center">Ações</th>
         </tr>
       </thead>
 
@@ -43,6 +47,13 @@ export function LinksTable() {
             <td>{link.shortCode}</td>
 
             <td>{link.accessCount}</td>
+
+            <td>
+              <div className="flex justify-center gap-2">
+                <CopyButton shortCode={link.shortCode} />
+                <DeleteButton id={link.id} />
+              </div>
+            </td>
           </tr>
         ))}
       </tbody>
