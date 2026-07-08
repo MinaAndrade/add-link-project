@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { errorResponseSchema } from './error-response-schema';
+
 const linkResponseSchema = z.object({
   id: z.string(),
   originalUrl: z.string().url(),
@@ -21,5 +23,6 @@ export const createLinkSchema = {
 
   response: {
     201: linkResponseSchema,
+    400: errorResponseSchema,
   },
 };

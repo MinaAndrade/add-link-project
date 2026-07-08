@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { errorResponseSchema } from './error-response-schema';
+
 export const redirectLinkSchema = {
   summary: 'Redirecionar link',
 
@@ -14,5 +16,6 @@ export const redirectLinkSchema = {
 
   response: {
     302: z.void(),
+    404: errorResponseSchema,
   },
 };

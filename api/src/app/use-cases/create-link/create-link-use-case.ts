@@ -3,13 +3,18 @@ import { uuidv7 } from 'uuidv7';
 import { Link } from '../../entities/link';
 import { LinkRepository } from '../../repositories/link-repository';
 
+import { InvalidUrlError } from '@/app/errors/invalid-url-error';
 import { generateShortCode } from '@/shared/utils/generate-short-code';
 
 export class CreateLinkUseCase {
   constructor(private readonly repository: LinkRepository) {}
 
   async execute(originalUrl: string): Promise<Link> {
-    new URL(originalUrl);
+    try {
+      new URL(originalUrl);
+    } catch {
+      throw new InvalidUrlError();
+    }
 
     let shortCode = generateShortCode();
 

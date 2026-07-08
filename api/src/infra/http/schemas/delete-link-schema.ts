@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { errorResponseSchema } from './error-response-schema';
+
 export const deleteLinkSchema = {
   summary: 'Excluir link',
 
@@ -13,5 +15,6 @@ export const deleteLinkSchema = {
 
   response: {
     204: z.void(),
+    404: errorResponseSchema,
   },
 };
