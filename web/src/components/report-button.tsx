@@ -4,23 +4,20 @@ import { generateReport } from '../http/generate-report';
 
 export function ReportButton() {
   async function handleDownload() {
-    const blob = await generateReport();
-
-    const url = URL.createObjectURL(blob);
+    const reportUrl = await generateReport();
 
     const link = document.createElement('a');
 
-    link.href = url;
+    link.href = reportUrl;
 
     link.download = 'links-report.csv';
 
     link.click();
-
-    URL.revokeObjectURL(url);
   }
 
   return (
     <button
+      type="button"
       onClick={handleDownload}
       className="
         flex
