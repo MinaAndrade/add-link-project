@@ -1,101 +1,96 @@
-# AddLink — Encurtador de Links
+# Brev.ly - Encurtador de Links
 
-Projeto Fullstack desenvolvido para o desafio da Pós-Graduação, com foco em arquitetura moderna, separação de responsabilidades e boas práticas de desenvolvimento.
+Aplicação fullstack desenvolvida para o desafio da pós-graduação Brev.ly. O projeto permite cadastrar, listar e remover links encurtados, redirecionar o codigo curto para a URL original, contabilizar acessos e gerar relatórios CSV enviados para o Cloudflare R2.
 
-## Objetivo
+## Funcionalidades
 
-O AddLink é uma aplicação para encurtamento de links que permite:
-
-- cadastrar links encurtados;
-- listar links cadastrados;
-- excluir links;
-- redirecionar o link encurtado para a URL original;
-- contabilizar acessos;
-- gerar relatório CSV;
-- disponibilizar documentação da API;
-- executar a aplicação com Docker.
+- Cadastro de links a partir de uma URL original.
+- Listagem dos links cadastrados.
+- Remoção de links.
+- Redirecionamento por código curto.
+- Contabilização de acessos por link.
+- Geração de relatório CSV com upload para Cloudflare R2.
+- Documentação da API via Swagger.
+- Execução local com Docker Compose.
+- Testes automatizados no backend.
 
 ## Tecnologias
 
-### Backend
+Backend:
 
 - Node.js
 - TypeScript
 - Fastify
 - Zod
+- fastify-type-provider-zod
+- Swagger/OpenAPI
 - Drizzle ORM
 - PostgreSQL
-- Docker
-- Swagger/OpenAPI
 - Vitest
 - Cloudflare R2
 
-### Frontend
+Frontend:
 
 - React
 - Vite
 - TypeScript
 - Tailwind CSS
 - Axios
-- React Query
+- TanStack React Query
 - React Hook Form
 - Zod
 - Lucide React
 
-### DevOps
+Infraestrutura:
 
 - Docker
 - Docker Compose
-- PostgreSQL containerizado
-- Variáveis de ambiente
+- Terraform
+- Cloudflare R2
 
-## Estrutura do projeto
+## Estrutura
 
 ```txt
-projeto_addLink
-├── api
-│   ├── scripts
-│   ├── src
-│   │   ├── app
-│   │   │   ├── entities
-│   │   │   ├── errors
-│   │   │   ├── repositories
-│   │   │   ├── storage
-│   │   │   └── use-cases
-│   │   ├── infra
-│   │   |   ├── db
-│   │   |   ├── http
-│   │   |   ├── mappers
-│   │   |   ├── plugins
-│   │   |   ├── repositories
-│   │   |   └── storage
-│   └── └── shared
-│           └── utils
-│
-├── web
-│   ├── src
-│   │   ├── components
-│   │   │   └── ui
-│   │   ├── http
-│   │   ├── lib
-│   │   ├── pages
-│   └── └── types
-├── docker-compose.yml
-└── README.md
+projeto_addLink/
+|-- api/
+|   |-- scripts/
+|   |-- src/
+|   |   |-- app/
+|   |   |   |-- entities/
+|   |   |   |-- errors/
+|   |   |   |-- repositories/
+|   |   |   |-- storage/
+|   |   |   `-- use-cases/
+|   |   |-- infra/
+|   |   |   |-- db/
+|   |   |   |-- http/
+|   |   |   |-- repositories/
+|   |   |   |-- storage/
+|   |   |   `-- terraform/
+|   |   `-- shared/
+|   |-- Dockerfile
+|   `-- package.json
+|-- web/
+|   |-- src/
+|   |   |-- components/
+|   |   |-- http/
+|   |   |-- lib/
+|   |   |-- pages/
+|   |   `-- types/
+|   |-- Dockerfile
+|   `-- package.json
+|-- docker-compose.yml
+`-- README.md
 ```
 
-# Como rodar o projeto
-
 ## Pré-requisitos
-
-Antes de iniciar o projeto, é necessário possuir instalado:
 
 - Node.js 20+
 - PNPM 9+
 - Docker
 - Docker Compose
 
-Verifique as versões:
+Verifique as instalações:
 
 ```bash
 node -v
@@ -104,25 +99,61 @@ docker -v
 docker compose version
 ```
 
----
+## Variaveis de ambiente
 
-# Opção 1 — Executando com Docker
+Crie o arquivo da API a partir do exemplo:
 
-Na raiz do projeto execute:
+```bash
+cp api/.env.example api/.env
+```
+
+Exemplo de `api/.env`:
+
+```env
+PORT=3333
+HOST=0.0.0.0
+NODE_ENV=development
+
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=addlink
+
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/addlink"
+
+CLOUDFLARE_ACCOUNT_ID=""
+CLOUDFLARE_ACCESS_KEY_ID=""
+CLOUDFLARE_SECRET_ACCESS_KEY=""
+CLOUDFLARE_BUCKET_NAME=""
+CLOUDFLARE_PUBLIC_URL="https://pub-example.r2.dev"
+```
+
+Crie também o arquivo do frontend, se precisar customizar a URL da API:
+
+```bash
+cp web/.env.example web/.env
+```
+
+Exemplo de `web/.env`:
+
+```env
+VITE_API_URL="http://localhost:3333"
+```
+
+## Executando com Docker
+
+Na raiz do projeto:
 
 ```bash
 docker compose up --build
 ```
 
-Aguarde a criação dos containers:
+Os serviços esperados são:
 
-```txt
-addlink-postgres
-addlink-api
-addlink-web
-```
+- `addlink-postgres`
+- `addlink-api`
+- `addlink-web`
 
-Após os containers iniciarem, execute as migrations:
+Depois que os containers estiverem ativos, execute as migrations:
 
 ```bash
 docker compose exec api pnpm db:migrate
@@ -131,810 +162,226 @@ docker compose exec api pnpm db:migrate
 Acesse:
 
 ```txt
-Frontend:
-http://localhost:5173
-
-API:
-http://127.0.0.1:3333
-
-Swagger:
-http://127.0.0.1:3333/docs
+Frontend: http://localhost:5173
+API:      http://127.0.0.1:3333
+Swagger:  http://127.0.0.1:3333/docs
 ```
 
----
-
-# Opção 2 — Executando localmente
-
-## 1. Subir apenas o banco de dados
-
-Na raiz:
-
-```bash
-docker compose up postgres
-```
-
----
-
-## 2. Rodar Backend
-
-Acesse:
-
-```bash
-cd api
-```
-
-Instale as dependências:
-
-```bash
-pnpm install
-```
-
-Execute as migrations:
-
-```bash
-pnpm db:migrate
-```
-
-Inicie a API:
-
-```bash
-pnpm dev
-```
-
-API disponível em:
-
-```txt
-http://127.0.0.1:3333
-```
-
----
-
-## 3. Rodar Frontend
-
-Em outro terminal:
-
-```bash
-cd web
-```
-
-Instale as dependências:
-
-```bash
-pnpm install
-```
-
-Inicie o frontend:
-
-```bash
-pnpm dev
-```
-
-Frontend disponível em:
-
-```txt
-http://localhost:5173
-```
-
----
-
-# Variáveis de Ambiente
-
-## API (.env)
-
-```env
-PORT=3333
-HOST=0.0.0.0
-
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/addlink
-
-CLOUDFLARE_ACCOUNT_ID=
-CLOUDFLARE_ACCESS_KEY_ID=
-CLOUDFLARE_SECRET_ACCESS_KEY=
-CLOUDFLARE_BUCKET_NAME=
-CLOUDFLARE_PUBLIC_URL=
-```
-
----
-
-## API (.env.test)
-
-```env
-NODE_ENV=test
-PORT=3334
-
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/addlink_test
-```
-
----
-
-# Como executar os testes
-
-Certifique-se de que o PostgreSQL está rodando.
-
-Entre na pasta da API:
-
-```bash
-cd api
-```
-
-Execute:
-
-```bash
-pnpm test
-```
-
-Fluxo executado automaticamente:
-
-```txt
-1. Cria o banco addlink_test (caso não exista)
-2. Executa as migrations
-3. Executa os testes Vitest
-```
-
----
-
-# Como gerar novas migrations
-
-Após alterar o schema do banco:
-
-```bash
-pnpm db:generate
-```
-
-Aplicar migrations:
-
-```bash
-pnpm db:migrate
-```
-
----
-
-# Como abrir o Drizzle Studio
-
-```bash
-pnpm db:studio
-```
-
----
-
-# Documentação da API
-
-Swagger disponível em:
-
-```txt
-http://127.0.0.1:3333/docs
-```
-
----
-
-# Possíveis erros e soluções
-
-## Erro: EADDRINUSE: address already in use ::1:3333
-
-### Exemplo
-
-```txt
-Error: listen EADDRINUSE: address already in use ::1:3333
-```
-
-### Causa
-
-A porta 3333 já está sendo utilizada por outro processo.
-
-### Solução
-
-Parar containers Docker:
+Para parar os containers sem apagar os dados:
 
 ```bash
 docker compose down
 ```
 
-Ou identificar o processo no Windows:
+Evite usar `docker compose down -v` se quiser preservar o banco, pois esse comando remove os volumes.
+
+## Executando localmente
+
+Suba apenas o PostgreSQL:
 
 ```bash
-netstat -ano | findstr :3333
+docker compose up postgres
 ```
 
-Finalizar processo:
+Em outro terminal, rode a API:
 
 ```bash
+cd api
+pnpm install
+pnpm db:migrate
+pnpm dev
+```
+
+Em outro terminal, rode o frontend:
+
+```bash
+cd web
+pnpm install
+pnpm dev
+```
+
+Acesse:
+
+```txt
+Frontend: http://localhost:5173
+API:      http://127.0.0.1:3333
+Swagger:  http://127.0.0.1:3333/docs
+```
+
+## Endpoints principais
+
+| Método | Rota | Descricao |
+| --- | --- | --- |
+| `POST` | `/links` | Cria um link encurtado |
+| `GET` | `/links` | Lista os links cadastrados |
+| `DELETE` | `/links/:id` | Remove um link |
+| `GET` | `/links/report` | Gera relatório CSV e retorna a URL pública |
+| `GET` | `/:shortCode` | Redireciona para a URL original |
+
+Observação: a rota `GET /:shortCode` deve ser testada diretamente no navegador. O "Try it out" do Swagger pode falhar por CORS ao seguir redirects externos.
+
+## Testes e qualidade
+
+Backend:
+
+```bash
+cd api
+pnpm test
+```
+
+O fluxo de testes cria o banco `addlink_test` quando necessário, executa as migrations e roda o Vitest.
+
+Comandos úteis da API:
+
+```bash
+pnpm dev
+pnpm build
+pnpm test
+pnpm lint
+pnpm format
+pnpm db:generate
+pnpm db:migrate
+pnpm db:studio
+```
+
+Comandos úteis do frontend:
+
+```bash
+pnpm dev
+pnpm build
+pnpm lint
+pnpm format
+pnpm preview
+```
+
+## Banco de dados
+
+O projeto usa PostgreSQL com Drizzle ORM. A tabela principal e `links`, com os campos:
+
+- `id`
+- `original_url`
+- `short_code`
+- `access_count`
+- `created_at`
+
+As migrations ficam em:
+
+```txt
+api/src/infra/db/migrations
+```
+
+Para gerar uma nova migration após alterar o schema:
+
+```bash
+cd api
+pnpm db:generate
+pnpm db:migrate
+```
+
+## Relatorios e Cloudflare R2
+
+A rota `GET /links/report` gera um CSV com os links cadastrados, envia o arquivo para o Cloudflare R2 e retorna uma URL pública:
+
+```json
+{
+  "reportUrl": "https://pub-example.r2.dev/reports/report-123.csv"
+}
+```
+
+Variáveis necessárias para o R2:
+
+```env
+CLOUDFLARE_ACCOUNT_ID=""
+CLOUDFLARE_ACCESS_KEY_ID=""
+CLOUDFLARE_SECRET_ACCESS_KEY=""
+CLOUDFLARE_BUCKET_NAME=""
+CLOUDFLARE_PUBLIC_URL=""
+```
+
+## Infraestrutura como código
+
+A configuração Terraform fica em:
+
+```txt
+api/src/infra/terraform
+```
+
+Arquivos principais:
+
+- `providers.tf`
+- `variables.tf`
+- `main.tf`
+- `outputs.tf`
+- `terraform.tfvars.example`
+
+Fluxo básico:
+
+```bash
+cd api/src/infra/terraform
+cp terraform.tfvars.example terraform.tfvars
+terraform init
+terraform plan
+```
+
+O arquivo `terraform.tfvars` deve conter valores reais apenas no ambiente local e não deve ser commitado.
+
+Arquivos que não devem ir para o repositório:
+
+```txt
+api/src/infra/terraform/.terraform/
+api/src/infra/terraform/.terraform.lock.hcl
+api/src/infra/terraform/terraform.tfstate
+api/src/infra/terraform/terraform.tfstate.backup
+api/src/infra/terraform/terraform.tfvars
+```
+
+## Observações de segurança
+
+- Nunca commite arquivos `.env`.
+- Nunca commite `terraform.tfvars` com tokens reais.
+- Nunca commite `terraform.tfstate`, pois ele pode conter dados sensíveis da infraestrutura.
+- Caso um token tenha sido versionado por engano, revogue-o e gere uma nova credencial.
+
+## Solução de problemas
+
+Porta ocupada:
+
+```bash
+docker compose down
+netstat -ano | findstr :3333
 taskkill /PID NUMERO_DO_PID /F
 ```
 
----
-
-## Erro: connect ECONNREFUSED ::1:3333
-
-### Exemplo
+Docker não conecta ao daemon:
 
 ```txt
-connect ECONNREFUSED ::1:3333
+permission denied while trying to connect to the docker API
 ```
 
-### Causa
+Verifique se o Docker Desktop esta aberto e se o terminal esta rodando com permissão para acessar o Docker.
 
-O localhost está resolvendo para IPv6 (`::1`).
+Banco sem dados apos reiniciar:
 
-### Solução
+- `docker compose down` preserva os dados.
+- `docker compose down -v` remove os volumes e apaga os dados.
 
-Utilizar:
+Erro de conexão com `localhost`:
+
+Use `127.0.0.1` para acessar a API:
 
 ```txt
 http://127.0.0.1:3333
 ```
 
-Ao invés de:
+## Status de validação
+
+Durante a revisão do projeto, foram validados:
 
 ```txt
-http://localhost:3333
-```
-
----
-
-## Erro: database "addlink_test" does not exist
-
-### Exemplo
-
-```txt
-PostgresError: database "addlink_test" does not exist
-```
-
-### Solução
-
-Executar:
-
-```bash
-pnpm db:create:test
-```
-
-ou:
-
-```bash
-docker compose exec postgres psql -U postgres -c "CREATE DATABASE addlink_test;"
-```
-
-Depois:
-
-```bash
-pnpm db:migrate:test
-```
-
----
-
-## Erro: password authentication failed
-
-### Exemplo
-
-```txt
-PostgresError: password authentication failed
-```
-
-### Causa
-
-Usuário ou senha incorretos no DATABASE_URL.
-
-### Solução
-
-Verificar:
-
-```env
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/addlink
-```
-
-e também:
-
-```yaml
-POSTGRES_USER: postgres
-POSTGRES_PASSWORD: postgres
-```
-
-no docker-compose.
-
----
-
-## Erro: variáveis Cloudflare undefined
-
-### Exemplo
-
-```txt
-CLOUDFLARE_ACCOUNT_ID -> undefined
-```
-
-### Solução
-
-Verificar se o arquivo `.env` possui:
-
-```env
-CLOUDFLARE_ACCOUNT_ID=
-CLOUDFLARE_ACCESS_KEY_ID=
-CLOUDFLARE_SECRET_ACCESS_KEY=
-CLOUDFLARE_BUCKET_NAME=
-CLOUDFLARE_PUBLIC_URL=
-```
-
-E se o Docker está carregando corretamente o arquivo:
-
-```yaml
-env_file:
-  - ./api/.env
-```
-
----
-
-## Erro: módulos não encontrados no Docker
-
-### Exemplo
-
-```txt
-Cannot find module 'tsx'
-Cannot find module 'vite'
-Cannot find package 'esbuild'
-```
-
-### Solução
-
-Garantir que existem os arquivos:
-
-### /api/.dockerignore
-
-```txt
-node_modules
-dist
-.env
-.env.test
-coverage
-```
-
-### /web/.dockerignore
-
-```txt
-node_modules
-dist
-.env
-coverage
-```
-
-Depois reconstruir:
-
-```bash
-docker compose down -v
-docker compose build --no-cache
-docker compose up
-```
-
----
-
-# Scripts disponíveis
-
-## API
-
-```bash
-pnpm dev
-pnpm dev:docker
-
-pnpm build
-
-pnpm test
-pnpm test:watch
-
-pnpm db:generate
-pnpm db:migrate
-pnpm db:migrate:test
-pnpm db:create:test
-pnpm db:studio
-
-pnpm format
-pnpm lint
-```
-
-## Frontend
-
-```bash
-pnpm dev
-
-pnpm build
-
-pnpm format
-pnpm lint
-```
-
-# Infrastructure as Code (IaC) com Terraform
-
-Este projeto utiliza Terraform para modelar a infraestrutura em nuvem da Cloudflare.
-
-A configuração está localizada em:
-
-```txt
-infra/terraform
-```
-
-Recursos gerenciados:
-
-- Cloudflare R2 Bucket utilizado para armazenar os relatórios CSV da aplicação.
-
----
-
-## Estrutura
-
-```txt
-infra/
-└── terraform/
-    ├── providers.tf
-    ├── variables.tf
-    ├── main.tf
-    ├── outputs.tf
-    └── terraform.tfvars.example
-```
-
----
-
-## Instalação do Terraform
-
-### Windows
-
-1. Acesse:
-
-https://developer.hashicorp.com/terraform/downloads
-
-2. Baixe:
-
-```txt
-Windows AMD64
-```
-
-3. Extraia o arquivo ZIP.
-
-4. Crie a pasta:
-
-```txt
-C:\Terraform
-```
-
-5. Copie:
-
-```txt
-terraform.exe
-```
-
-para dentro dessa pasta.
-
-6. Adicione ao PATH:
-
-```txt
-Painel de Controle
-→ Sistema
-→ Configurações avançadas do sistema
-→ Variáveis de Ambiente
-→ Path
-→ Novo
-→ C:\Terraform
-```
-
-7. Abra um novo terminal e valide:
-
-```bash
-terraform version
-```
-
-Resultado esperado:
-
-```txt
-Terraform v1.x.x
-```
-
----
-
-## Obtendo credenciais da Cloudflare
-
-### Account ID
-
-Acesse:
-
-```txt
-Cloudflare Dashboard
-→ R2 Object Storage
-```
-
-ou
-
-```txt
-Cloudflare Dashboard
-→ Manage Account
-```
-
-Copie o valor:
-
-```txt
-Account ID
-```
-
----
-
-### API Token
-
-Acesse:
-
-```txt
-Cloudflare Dashboard
-→ My Profile
-→ API Tokens
-→ Create Token
-→ Custom Token
-```
-
-Permissões:
-
-```txt
-Account Permissions
-│
-└── Workers R2 Storage
-    └── Edit
-```
-
-Recursos:
-
-```txt
-Include
-└── Sua conta Cloudflare
-```
-
-ou
-
-```txt
-Include
-└── All Accounts
-```
-
-Clique:
-
-```txt
-Continue to Summary
-Create Token
-```
-
-Copie o token gerado.
-
-⚠️ O token será exibido apenas uma vez.
-
----
-
-## Configuração das variáveis
-
-Entre na pasta:
-
-```bash
-cd infra/terraform
-```
-
-Copie o arquivo exemplo:
-
-```bash
-cp terraform.tfvars.example terraform.tfvars
-```
-
-Preencha:
-
-```hcl
-cloudflare_api_token  = "SEU_TOKEN"
-cloudflare_account_id = "SEU_ACCOUNT_ID"
-
-r2_bucket_name = "add-link"
-r2_location    = "ENAM"
-```
-
----
-
-## Inicializar Terraform
-
-```bash
-terraform init
-```
-
-Resultado esperado:
-
-```txt
-Terraform has been successfully initialized!
-```
-
----
-
-## Bucket já existente
-
-Como o bucket foi criado manualmente durante o desenvolvimento, ele deve ser importado para o Terraform.
-
-Execute:
-
-```bash
-terraform import cloudflare_r2_bucket.reports <ACCOUNT_ID>/add-link
-```
-
-Exemplo:
-
-```bash
-terraform import cloudflare_r2_bucket.reports 123456789abcdef/add-link
-```
-
----
-
-## Validar a infraestrutura
-
-Execute:
-
-```bash
-terraform plan
-```
-
-Resultado esperado:
-
-```txt
-No changes. Your infrastructure matches the configuration.
-```
-
-Se aparecer:
-
-```txt
-destroy and create replacement
-```
-
-não execute o apply antes de revisar.
-
----
-
-## Aplicar alterações futuras
-
-Quando houver alterações na infraestrutura:
-
-```bash
-terraform apply
-```
-
----
-
-## Outputs
-
-Visualizar outputs:
-
-```bash
-terraform output
-```
-
-Exemplo:
-
-```txt
-r2_bucket_name = "add-link"
-r2_bucket_location = "ENAM"
-```
-
----
-
-## Arquivos importantes
-
-### providers.tf
-
-Configuração do provider Cloudflare.
-
-### variables.tf
-
-Definição das variáveis utilizadas pela infraestrutura.
-
-### main.tf
-
-Recursos da infraestrutura.
-
-### outputs.tf
-
-Valores retornados após aplicação da infraestrutura.
-
-### terraform.tfvars
-
-Valores reais utilizados no ambiente.
-
-⚠️ Não deve ser commitado.
-
----
-
-## Git Ignore
-
-Adicionar ao `.gitignore` da raiz:
-
-```gitignore
-# Terraform
-infra/terraform/.terraform/
-infra/terraform/.terraform.lock.hcl
-infra/terraform/terraform.tfstate
-infra/terraform/terraform.tfstate.backup
-infra/terraform/terraform.tfvars
-
-# Env
-.env
-api/.env
-api/.env.test
-web/.env
-
-# Dependencies
-node_modules
-api/node_modules
-web/node_modules
-
-# Build
-dist
-api/dist
-web/dist
-coverage
-```
-
----
-
-## Fluxo utilizado neste projeto
-
-1. Bucket R2 criado inicialmente na Cloudflare.
-2. Bucket importado para o Terraform.
-3. Terraform passou a gerenciar o recurso.
-4. Estado validado com:
-
-```bash
-terraform plan
-```
-
-5. Infraestrutura sincronizada quando o resultado foi:
-
-```txt
-No changes. Your infrastructure matches the configuration.
-```
-
----
-
-## Benefícios do IaC
-
-- Infraestrutura versionada junto ao código.
-- Revisão através de Pull Requests.
-- Reprodutibilidade do ambiente.
-- Redução de erros manuais.
-- Governança e rastreabilidade.
-- Facilidade para novos desenvolvedores reproduzirem o ambiente.
-
----
-
-## Comandos úteis
-
-Inicializar:
-
-```bash
-terraform init
-```
-
-Validar:
-
-```bash
-terraform validate
-```
-
-Planejar:
-
-```bash
-terraform plan
-```
-
-Aplicar:
-
-```bash
-terraform apply
-```
-
-Visualizar outputs:
-
-```bash
-terraform output
-```
-
-Importar recurso existente:
-
-```bash
-terraform import cloudflare_r2_bucket.reports <ACCOUNT_ID>/add-link
-```
-
-Destruir recursos (não utilizar neste projeto):
-
-```bash
-terraform destroy
+API TypeScript
+API build
+Testes unitários da API
+Frontend TypeScript
+Frontend build
+Docker Compose config
 ```

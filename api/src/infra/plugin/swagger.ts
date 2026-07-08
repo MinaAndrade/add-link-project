@@ -8,9 +8,9 @@ export async function registerSwagger(app: FastifyInstance) {
     openapi: {
       openapi: '3.0.0',
       info: {
-        title: 'Add Link API',
+        title: 'Brev.ly API',
         version: '1.0.0',
-        description: 'API de encurtamento de links',
+        description: 'API do encurtador de links Brev.ly',
       },
     },
     transform: jsonSchemaTransform,

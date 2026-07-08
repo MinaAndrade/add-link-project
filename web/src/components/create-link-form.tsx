@@ -1,11 +1,12 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Link } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { createLink } from '../http/create-link';
 import {
-  createLinkSchema,
   type CreateLinkSchema,
+  createLinkSchema,
 } from '../types/create-link-schema';
 
 export function CreateLinkForm() {
@@ -45,14 +46,18 @@ export function CreateLinkForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
-        <input
-          {...register('originalUrl')}
-          placeholder="https://www.google.com"
-          className="w-full rounded-lg border border-gray-300 px-4 py-3"
-        />
+        <div className="flex items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 transition focus-within:border-[#ef4444] focus-within:ring-4 focus-within:ring-red-100">
+          <Link size={18} className="shrink-0 text-[#64748B]" />
+
+          <input
+            {...register('originalUrl')}
+            placeholder="https://www.exemplo.com"
+            className="w-full bg-transparent text-sm text-[#020817] outline-none placeholder:text-[#64748B]"
+          />
+        </div>
 
         {errors.originalUrl && (
-          <p className="mt-2 text-sm text-red-500">
+          <p className="mt-2 text-sm text-[#ef4444]">
             {errors.originalUrl.message}
           </p>
         )}
@@ -61,18 +66,9 @@ export function CreateLinkForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="
-          w-full
-          rounded-lg
-          bg-blue-600
-          py-3
-          font-medium
-          text-white
-          transition
-          hover:bg-blue-700
-        "
+        className="w-full rounded-lg bg-[#ef4444] py-3 font-medium text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isPending ? 'Encurtando...' : 'Encurtar Link'}
+        {isPending ? 'Encurtando...' : 'Criar link curto'}
       </button>
     </form>
   );

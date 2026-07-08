@@ -9,9 +9,7 @@ export function ReportButton() {
     const link = document.createElement('a');
 
     link.href = reportUrl;
-
     link.download = 'links-report.csv';
-
     link.click();
   }
 
@@ -19,21 +17,10 @@ export function ReportButton() {
     <button
       type="button"
       onClick={handleDownload}
-      className="
-        flex
-        items-center
-        gap-2
-        rounded-lg
-        bg-green-600
-        px-4
-        py-3
-        text-white
-        transition
-        hover:bg-green-700
-      "
+      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-[#020817] transition hover:border-[#ef4444] hover:text-[#ef4444]"
     >
       <Download size={18} />
-      Baixar relatório
+      Baixar relatorio
     </button>
   );
 }
