@@ -1,8 +1,8 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 
+import type { FileStorage, UploadParams } from '@/app/storage/storage';
 import { env } from '@/env';
-import { FileStorage, UploadParams } from '@/app/storage/storage';
 
 const client = new S3Client({
   region: 'auto',
@@ -31,6 +31,8 @@ export class R2Storage implements FileStorage {
       },
     }).done();
 
-    return `${env.CLOUDFLARE_PUBLIC_URL}/${data.fileName}`;
+    const publicUrl = env.CLOUDFLARE_PUBLIC_URL.replace(/\/$/, '');
+
+    return `${publicUrl}/${data.fileName}`;
   }
 }
