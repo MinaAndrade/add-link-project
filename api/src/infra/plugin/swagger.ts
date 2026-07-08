@@ -1,6 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import { jsonSchemaTransform } from 'fastify-type-provider-zod';
 
 export async function registerSwagger(app: FastifyInstance) {
   await app.register(fastifySwagger, {
@@ -12,6 +13,7 @@ export async function registerSwagger(app: FastifyInstance) {
         description: 'API de encurtamento de links',
       },
     },
+    transform: jsonSchemaTransform,
   });
 
   await app.register(fastifySwaggerUi, {

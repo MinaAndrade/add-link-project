@@ -10,9 +10,5 @@ export async function generateReportController(
 
   const result = await useCase.execute();
 
-  reply
-    .header('Content-Type', 'text/csv')
-    .header('Content-Disposition', 'attachment; filename="links-report.csv"');
-
   return reply.send(result);
 }
