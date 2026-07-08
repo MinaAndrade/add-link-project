@@ -1,0 +1,5 @@
+cloudflare_api_token  = "coloque-seu-token-aqui"
+cloudflare_account_id = "coloque-seu-account-id-aqui"
+
+r2_bucket_name = "add-link"
+r2_location    = "ENAM"
