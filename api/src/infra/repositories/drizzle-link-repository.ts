@@ -8,14 +8,13 @@ import {
 
 import { db } from '../db/connections';
 import { links } from '../db/schema/links';
-import { uuidv7 } from 'uuidv7';
 
 export class DrizzleLinkRepository implements LinkRepository {
   async create(data: CreateLinkDTO): Promise<Link> {
     const [link] = await db
       .insert(links)
       .values({
-        id: uuidv7(),
+        id: data.id,
         originalUrl: data.originalUrl,
         shortCode: data.shortCode,
       })
