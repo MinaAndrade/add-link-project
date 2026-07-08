@@ -537,3 +537,404 @@ pnpm build
 pnpm format
 pnpm lint
 ```
+
+# Infrastructure as Code (IaC) com Terraform
+
+Este projeto utiliza Terraform para modelar a infraestrutura em nuvem da Cloudflare.
+
+A configuração está localizada em:
+
+```txt
+infra/terraform
+```
+
+Recursos gerenciados:
+
+- Cloudflare R2 Bucket utilizado para armazenar os relatórios CSV da aplicação.
+
+---
+
+## Estrutura
+
+```txt
+infra/
+└── terraform/
+    ├── providers.tf
+    ├── variables.tf
+    ├── main.tf
+    ├── outputs.tf
+    └── terraform.tfvars.example
+```
+
+---
+
+## Instalação do Terraform
+
+### Windows
+
+1. Acesse:
+
+https://developer.hashicorp.com/terraform/downloads
+
+2. Baixe:
+
+```txt
+Windows AMD64
+```
+
+3. Extraia o arquivo ZIP.
+
+4. Crie a pasta:
+
+```txt
+C:\Terraform
+```
+
+5. Copie:
+
+```txt
+terraform.exe
+```
+
+para dentro dessa pasta.
+
+6. Adicione ao PATH:
+
+```txt
+Painel de Controle
+→ Sistema
+→ Configurações avançadas do sistema
+→ Variáveis de Ambiente
+→ Path
+→ Novo
+→ C:\Terraform
+```
+
+7. Abra um novo terminal e valide:
+
+```bash
+terraform version
+```
+
+Resultado esperado:
+
+```txt
+Terraform v1.x.x
+```
+
+---
+
+## Obtendo credenciais da Cloudflare
+
+### Account ID
+
+Acesse:
+
+```txt
+Cloudflare Dashboard
+→ R2 Object Storage
+```
+
+ou
+
+```txt
+Cloudflare Dashboard
+→ Manage Account
+```
+
+Copie o valor:
+
+```txt
+Account ID
+```
+
+---
+
+### API Token
+
+Acesse:
+
+```txt
+Cloudflare Dashboard
+→ My Profile
+→ API Tokens
+→ Create Token
+→ Custom Token
+```
+
+Permissões:
+
+```txt
+Account Permissions
+│
+└── Workers R2 Storage
+    └── Edit
+```
+
+Recursos:
+
+```txt
+Include
+└── Sua conta Cloudflare
+```
+
+ou
+
+```txt
+Include
+└── All Accounts
+```
+
+Clique:
+
+```txt
+Continue to Summary
+Create Token
+```
+
+Copie o token gerado.
+
+⚠️ O token será exibido apenas uma vez.
+
+---
+
+## Configuração das variáveis
+
+Entre na pasta:
+
+```bash
+cd infra/terraform
+```
+
+Copie o arquivo exemplo:
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+Preencha:
+
+```hcl
+cloudflare_api_token  = "SEU_TOKEN"
+cloudflare_account_id = "SEU_ACCOUNT_ID"
+
+r2_bucket_name = "add-link"
+r2_location    = "ENAM"
+```
+
+---
+
+## Inicializar Terraform
+
+```bash
+terraform init
+```
+
+Resultado esperado:
+
+```txt
+Terraform has been successfully initialized!
+```
+
+---
+
+## Bucket já existente
+
+Como o bucket foi criado manualmente durante o desenvolvimento, ele deve ser importado para o Terraform.
+
+Execute:
+
+```bash
+terraform import cloudflare_r2_bucket.reports <ACCOUNT_ID>/add-link
+```
+
+Exemplo:
+
+```bash
+terraform import cloudflare_r2_bucket.reports 123456789abcdef/add-link
+```
+
+---
+
+## Validar a infraestrutura
+
+Execute:
+
+```bash
+terraform plan
+```
+
+Resultado esperado:
+
+```txt
+No changes. Your infrastructure matches the configuration.
+```
+
+Se aparecer:
+
+```txt
+destroy and create replacement
+```
+
+não execute o apply antes de revisar.
+
+---
+
+## Aplicar alterações futuras
+
+Quando houver alterações na infraestrutura:
+
+```bash
+terraform apply
+```
+
+---
+
+## Outputs
+
+Visualizar outputs:
+
+```bash
+terraform output
+```
+
+Exemplo:
+
+```txt
+r2_bucket_name = "add-link"
+r2_bucket_location = "ENAM"
+```
+
+---
+
+## Arquivos importantes
+
+### providers.tf
+
+Configuração do provider Cloudflare.
+
+### variables.tf
+
+Definição das variáveis utilizadas pela infraestrutura.
+
+### main.tf
+
+Recursos da infraestrutura.
+
+### outputs.tf
+
+Valores retornados após aplicação da infraestrutura.
+
+### terraform.tfvars
+
+Valores reais utilizados no ambiente.
+
+⚠️ Não deve ser commitado.
+
+---
+
+## Git Ignore
+
+Adicionar ao `.gitignore` da raiz:
+
+```gitignore
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/.terraform.lock.hcl
+infra/terraform/terraform.tfstate
+infra/terraform/terraform.tfstate.backup
+infra/terraform/terraform.tfvars
+
+# Env
+.env
+api/.env
+api/.env.test
+web/.env
+
+# Dependencies
+node_modules
+api/node_modules
+web/node_modules
+
+# Build
+dist
+api/dist
+web/dist
+coverage
+```
+
+---
+
+## Fluxo utilizado neste projeto
+
+1. Bucket R2 criado inicialmente na Cloudflare.
+2. Bucket importado para o Terraform.
+3. Terraform passou a gerenciar o recurso.
+4. Estado validado com:
+
+```bash
+terraform plan
+```
+
+5. Infraestrutura sincronizada quando o resultado foi:
+
+```txt
+No changes. Your infrastructure matches the configuration.
+```
+
+---
+
+## Benefícios do IaC
+
+- Infraestrutura versionada junto ao código.
+- Revisão através de Pull Requests.
+- Reprodutibilidade do ambiente.
+- Redução de erros manuais.
+- Governança e rastreabilidade.
+- Facilidade para novos desenvolvedores reproduzirem o ambiente.
+
+---
+
+## Comandos úteis
+
+Inicializar:
+
+```bash
+terraform init
+```
+
+Validar:
+
+```bash
+terraform validate
+```
+
+Planejar:
+
+```bash
+terraform plan
+```
+
+Aplicar:
+
+```bash
+terraform apply
+```
+
+Visualizar outputs:
+
+```bash
+terraform output
+```
+
+Importar recurso existente:
+
+```bash
+terraform import cloudflare_r2_bucket.reports <ACCOUNT_ID>/add-link
+```
+
+Destruir recursos (não utilizar neste projeto):
+
+```bash
+terraform destroy
+```
