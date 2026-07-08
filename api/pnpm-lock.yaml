@@ -17,9 +17,6 @@ importers:
       '@fastify/cors':
         specifier: ^10.0.1
         version: 10.1.0
-      '@fastify/multipart':
-        specifier: ^9.0.1
-        version: 9.4.0
       '@fastify/swagger':
         specifier: ^9.4.0
         version: 9.7.0
@@ -29,9 +26,6 @@ importers:
       csv-stringify:
         specifier: ^6.5.2
         version: 6.8.1
-      dayjs:
-        specifier: ^1.11.20
-        version: 1.11.21
       dotenv-cli:
         specifier: ^7.4.4
         version: 7.4.4
@@ -47,18 +41,12 @@ importers:
       postgres:
         specifier: ^3.4.8
         version: 3.4.9
-      terraform:
-        specifier: ^1.27.0
-        version: 1.27.0
       uuidv7:
         specifier: ^1.0.2
         version: 1.2.1
       zod:
         specifier: ^3.24.1
         version: 3.25.76
-      zod-openapi:
-        specifier: ^2.19.0
-        version: 2.19.0(zod@3.25.76)
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4

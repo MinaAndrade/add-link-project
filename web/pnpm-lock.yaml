@@ -11,18 +11,6 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.4.0
         version: 5.4.0(react-hook-form@7.81.0(react@18.3.1))
-      '@radix-ui/react-collapsible':
-        specifier: ^1.1.1
-        version: 1.1.16(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-progress':
-        specifier: ^1.1.0
-        version: 1.1.12(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-scroll-area':
-        specifier: ^1.2.1
-        version: 1.2.14(@types/react-dom@18.3.7(@types/react@18.3.31))(@types/react@18.3.31)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@radix-ui/react-slot':
-        specifier: ^1.1.0
-        version: 1.3.0(@types/react@18.3.31)(react@18.3.1)
       '@tanstack/react-query':
         specifier: ^5.101.2
         version: 5.101.2(react@18.3.1)
@@ -32,39 +20,21 @@ importers:
       dayjs:
         specifier: ^1.11.21
         version: 1.11.21
-      immer:
-        specifier: ^10.1.1
-        version: 10.2.0
       lucide-react:
         specifier: ^0.462.0
         version: 0.462.0(react@18.3.1)
-      motion:
-        specifier: ^11.13.1
-        version: 11.18.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
-      react-dropzone:
-        specifier: ^14.3.5
-        version: 14.4.1(react@18.3.1)
       react-hook-form:
         specifier: ^7.81.0
         version: 7.81.0(react@18.3.1)
-      tailwind-merge:
-        specifier: ^3.6.0
-        version: 3.6.0
-      tailwind-variants:
-        specifier: ^0.3.0
-        version: 0.3.1(tailwindcss@3.4.19)
       zod:
         specifier: ^3.24.1
         version: 3.25.76
-      zustand:
-        specifier: ^5.0.1
-        version: 5.0.14(@types/react@18.3.31)(immer@10.2.0)(react@18.3.1)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.5.2
