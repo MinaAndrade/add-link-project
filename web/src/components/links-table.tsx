@@ -8,13 +8,35 @@ import { DeleteButton } from './delete-button';
 import { EmptyState } from './empty-state';
 
 export function LinksTable() {
-  const { data = [], isLoading } = useQuery({
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['links'],
     queryFn: fetchLinks,
   });
 
   if (isLoading) {
-    return <div className="py-12 text-center">Carregando links...</div>;
+    return (
+      <div className="flex justify-center py-12">
+        <p className="text-gray-500">Carregando links...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="rounded-lg border border-red-300 bg-red-50 p-6 text-center">
+        <p className="font-medium text-red-700">
+          Não foi possível carregar os links.
+        </p>
+
+        <p className="mt-2 text-sm text-red-500">
+          Verifique se a API está em execução.
+        </p>
+      </div>
+    );
   }
 
   if (!data.length) {
@@ -36,10 +58,7 @@ export function LinksTable() {
 
       <tbody>
         {data.map(link => (
-          <tr
-            key={link.id}
-            className="border-b transition hover:bg-gray-50"
-          >
+          <tr key={link.id} className="border-b transition hover:bg-gray-50">
             <td className="max-w-sm truncate">
               <a
                 href={link.originalUrl}
@@ -80,7 +99,8 @@ export function LinksTable() {
                 href={`http://localhost:3333/${link.shortCode}`}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-lg bg-gray-100 px-3 py-2 text-sm hover:bg-gray-200" >
+                className="rounded-lg bg-gray-100 px-3 py-2 text-sm hover:bg-gray-200"
+              >
                 Abrir
               </a>
             </td>
