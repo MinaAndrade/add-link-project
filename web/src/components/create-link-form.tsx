@@ -33,7 +33,13 @@ export function CreateLinkForm() {
   });
 
   async function onSubmit(data: CreateLinkSchema) {
-    await mutateAsync(data);
+    if (!data.originalUrl) {
+      return;
+    }
+
+    await mutateAsync({
+      originalUrl: data.originalUrl,
+    });
   }
 
   return (

@@ -1,12 +1,14 @@
 import { Copy } from 'lucide-react';
 
+import { getApiUrl } from '../lib/api-url';
+
 interface Props {
   shortCode: string;
 }
 
 export function CopyButton({ shortCode }: Props) {
   async function handleCopy() {
-    const url = `http://localhost:3333/${shortCode}`;
+    const url = getApiUrl(shortCode);
 
     await navigator.clipboard.writeText(url);
 

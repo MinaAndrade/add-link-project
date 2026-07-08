@@ -4,4 +4,4 @@ export const createLinkSchema = z.object({
   originalUrl: z.string().url('Informe uma URL válida.'),
 });
 
-export type CreateLinkSchema = z.infer<typeof createLinkSchema>;
+export type CreateLinkSchema = z.output<typeof createLinkSchema>;

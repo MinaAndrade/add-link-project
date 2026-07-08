@@ -7,6 +7,7 @@ async function bootstrap() {
 
   await app.listen({
     port: env.PORT,
+    host: env.HOST,
   });
 
   console.log('HTTP Server running!');

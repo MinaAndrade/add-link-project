@@ -3,12 +3,11 @@ import {
   pgTable,
   text,
   timestamp,
-  uuid,
   varchar,
 } from 'drizzle-orm/pg-core';
 
 export const links = pgTable('links', {
-  id: uuid('id').primaryKey(),
+  id: varchar('id', { length: 36 }).primaryKey(),
 
   originalUrl: text('original_url').notNull(),
 

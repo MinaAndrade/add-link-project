@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 
 import { fetchLinks } from '../http/fetch-links';
+import { getApiUrl } from '../lib/api-url';
 
 import { CopyButton } from './copy-button';
 import { DeleteButton } from './delete-button';
@@ -71,7 +72,7 @@ export function LinksTable() {
 
             <td>
               <a
-                href={`http://localhost:3333/${link.shortCode}`}
+                href={getApiUrl(link.shortCode)}
                 target="_blank"
                 rel="noreferrer"
                 className="text-blue-600 hover:underline"

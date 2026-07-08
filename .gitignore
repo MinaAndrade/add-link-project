@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.*
+api/.env
+api/.env.*
+web/.env
+web/.env.*
+!.env.example
+!api/.env.example
+!web/.env.example
+
+# Dependencies
+node_modules/
+api/node_modules/
+web/node_modules/
+
+# Build
+dist/
+api/dist/
+web/dist/
+coverage/
+
+# Terraform
+api/src/infra/terraform/.terraform/
+api/src/infra/terraform/.terraform.lock.hcl
+api/src/infra/terraform/terraform.tfstate
+api/src/infra/terraform/terraform.tfstate.backup
+api/src/infra/terraform/terraform.tfvars
