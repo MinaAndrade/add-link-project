@@ -1,10 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Link } from '../entities/link';
-import {
-  CreateLinkDTO,
-  LinkRepository,
-} from '../repositories/link-repository';
+import { CreateLinkDTO, LinkRepository } from '../repositories/link-repository';
 import { FileStorage, UploadParams } from '../storage/storage';
 
 import { InvalidUrlError } from '@/app/errors/invalid-url-error';
