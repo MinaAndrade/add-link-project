@@ -1,5 +1,5 @@
 import { api } from '../lib/api';
-import { type Link } from '../types/link';
+import type { Link } from '../types/link';
 
 interface CreateLinkRequest {
   originalUrl: string;

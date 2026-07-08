@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
 import { fetchLinks } from '../http/fetch-links';
 
@@ -27,14 +28,19 @@ export function LinksTable() {
           <th className="py-3 text-left">URL</th>
           <th className="text-left">Código</th>
           <th className="text-left">Acessos</th>
+          <th className="text-left">Criado em</th>
           <th className="text-center">Ações</th>
+          <th className="text-center">Abrir</th>
         </tr>
       </thead>
 
       <tbody>
         {data.map(link => (
-          <tr key={link.id} className="border-b transition hover:bg-gray-50">
-            <td className="py-4">
+          <tr
+            key={link.id}
+            className="border-b transition hover:bg-gray-50"
+          >
+            <td className="max-w-sm truncate">
               <a
                 href={link.originalUrl}
                 target="_blank"
@@ -56,13 +62,27 @@ export function LinksTable() {
               </a>
             </td>
 
-            <td>{link.accessCount}</td>
+            <td className="text-center">{link.accessCount}</td>
+
+            <td className="py-4">
+              {dayjs(link.createdAt).format('DD/MM/YYYY')}
+            </td>
 
             <td>
-              <div className="flex justify-center gap-2">
+              <div className="flex justify-center gap-1">
                 <CopyButton shortCode={link.shortCode} />
                 <DeleteButton id={link.id} />
               </div>
+            </td>
+
+            <td className="text-center">
+              <a
+                href={`http://localhost:3333/${link.shortCode}`}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-lg bg-gray-100 px-3 py-2 text-sm hover:bg-gray-200" >
+                Abrir
+              </a>
             </td>
           </tr>
         ))}
