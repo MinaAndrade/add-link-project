@@ -11,8 +11,6 @@ RUN pnpm install --no-frozen-lockfile
 
 COPY . .
 
-RUN pnpm build
-
 EXPOSE 3333
 
-CMD ["node", "dist/server.mjs"]
+CMD ["pnpm", "dev:docker"]

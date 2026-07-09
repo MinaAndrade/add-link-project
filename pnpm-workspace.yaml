@@ -1,0 +1,8 @@
+packages:
+  - "server"
+  - "web"
+
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - "@parcel/watcher"
+  - "esbuild"
