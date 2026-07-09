@@ -1,28 +1,29 @@
 # Environment
 .env
 .env.*
-api/.env
-api/.env.*
+server/.env
+server/.env.*
 web/.env
 web/.env.*
 !.env.example
-!api/.env.example
 !web/.env.example
+!server/.env.example
 
 # Dependencies
 node_modules/
-api/node_modules/
+.pnpm-store/
+server/node_modules/
 web/node_modules/
 
 # Build
 dist/
-api/dist/
+server/dist/
 web/dist/
 coverage/
 
 # Terraform
-api/src/infra/terraform/.terraform/
-api/src/infra/terraform/.terraform.lock.hcl
-api/src/infra/terraform/terraform.tfstate
-api/src/infra/terraform/terraform.tfstate.backup
-api/src/infra/terraform/terraform.tfvars
+server/src/infra/terraform/.terraform/
+server/src/infra/terraform/.terraform.lock.hcl
+server/src/infra/terraform/terraform.tfstate
+server/src/infra/terraform/terraform.tfstate.backup
+server/src/infra/terraform/terraform.tfvars

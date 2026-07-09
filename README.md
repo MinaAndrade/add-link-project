@@ -52,7 +52,7 @@ Infraestrutura:
 
 ```txt
 projeto_addLink/
-|-- api/
+|-- server/
 |   |-- scripts/
 |   |-- src/
 |   |   |-- app/
@@ -101,13 +101,13 @@ docker compose version
 
 ## Variaveis de ambiente
 
-Crie o arquivo da API a partir do exemplo:
+Crie o arquivo do backend a partir do exemplo:
 
 ```bash
-cp api/.env.example api/.env
+cp server/.env.example server/.env
 ```
 
-Exemplo de `api/.env`:
+Exemplo de `server/.env`:
 
 ```env
 PORT=3333
@@ -123,7 +123,7 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/addlink"
 CLOUDFLARE_ACCOUNT_ID=""
 CLOUDFLARE_ACCESS_KEY_ID=""
 CLOUDFLARE_SECRET_ACCESS_KEY=""
-CLOUDFLARE_BUCKET_NAME=""
+CLOUDFLARE_BUCKET=""
 CLOUDFLARE_PUBLIC_URL="https://pub-example.r2.dev"
 ```
 
@@ -136,7 +136,8 @@ cp web/.env.example web/.env
 Exemplo de `web/.env`:
 
 ```env
-VITE_API_URL="http://localhost:3333"
+VITE_FRONTEND_URL="http://localhost:5173"
+VITE_BACKEND_URL="http://localhost:3333"
 ```
 
 ## Executando com Docker
@@ -150,13 +151,13 @@ docker compose up --build
 Os serviços esperados são:
 
 - `addlink-postgres`
-- `addlink-api`
+- `addlink-server`
 - `addlink-web`
 
 Depois que os containers estiverem ativos, execute as migrations:
 
 ```bash
-docker compose exec api pnpm db:migrate
+docker compose exec server pnpm db:migrate
 ```
 
 Acesse:
@@ -186,7 +187,7 @@ docker compose up postgres
 Em outro terminal, rode a API:
 
 ```bash
-cd api
+cd server
 pnpm install
 pnpm db:migrate
 pnpm dev
@@ -225,7 +226,7 @@ Observação: a rota `GET /:shortCode` deve ser testada diretamente no navegador
 Backend:
 
 ```bash
-cd api
+cd server
 pnpm test
 ```
 
@@ -267,13 +268,13 @@ O projeto usa PostgreSQL com Drizzle ORM. A tabela principal e `links`, com os c
 As migrations ficam em:
 
 ```txt
-api/src/infra/db/migrations
+server/src/infra/db/migrations
 ```
 
 Para gerar uma nova migration após alterar o schema:
 
 ```bash
-cd api
+cd server
 pnpm db:generate
 pnpm db:migrate
 ```
@@ -294,7 +295,7 @@ Variáveis necessárias para o R2:
 CLOUDFLARE_ACCOUNT_ID=""
 CLOUDFLARE_ACCESS_KEY_ID=""
 CLOUDFLARE_SECRET_ACCESS_KEY=""
-CLOUDFLARE_BUCKET_NAME=""
+CLOUDFLARE_BUCKET=""
 CLOUDFLARE_PUBLIC_URL=""
 ```
 
@@ -303,7 +304,7 @@ CLOUDFLARE_PUBLIC_URL=""
 A configuração Terraform fica em:
 
 ```txt
-api/src/infra/terraform
+server/src/infra/terraform
 ```
 
 Arquivos principais:
@@ -317,7 +318,7 @@ Arquivos principais:
 Fluxo básico:
 
 ```bash
-cd api/src/infra/terraform
+cd server/src/infra/terraform
 cp terraform.tfvars.example terraform.tfvars
 terraform init
 terraform plan
@@ -328,11 +329,11 @@ O arquivo `terraform.tfvars` deve conter valores reais apenas no ambiente local 
 Arquivos que não devem ir para o repositório:
 
 ```txt
-api/src/infra/terraform/.terraform/
-api/src/infra/terraform/.terraform.lock.hcl
-api/src/infra/terraform/terraform.tfstate
-api/src/infra/terraform/terraform.tfstate.backup
-api/src/infra/terraform/terraform.tfvars
+server/src/infra/terraform/.terraform/
+server/src/infra/terraform/.terraform.lock.hcl
+server/src/infra/terraform/terraform.tfstate
+server/src/infra/terraform/terraform.tfstate.backup
+server/src/infra/terraform/terraform.tfvars
 ```
 
 ## Observações de segurança

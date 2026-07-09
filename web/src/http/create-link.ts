@@ -3,6 +3,7 @@ import type { Link } from '../types/link';
 
 interface CreateLinkRequest {
   originalUrl: string;
+  shortCode: string;
 }
 
 export async function createLink(body: CreateLinkRequest): Promise<Link> {

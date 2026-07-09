@@ -5,13 +5,9 @@ export function CreateLinkCard() {
   return (
     <Card>
       <div className="space-y-6">
-        <div>
-          <h2 className="text-xl font-semibold text-[#020817]">Novo link</h2>
-
-          <p className="mt-1 text-sm text-[#64748B]">
-            Informe a URL original para gerar um link brev.ly.
-          </p>
-        </div>
+        <h2 className="text-lg font-bold leading-6 text-[#1F2025]">
+          Novo link
+        </h2>
 
         <CreateLinkForm />
       </div>

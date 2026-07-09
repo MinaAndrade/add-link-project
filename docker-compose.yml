@@ -11,14 +11,14 @@ services:
     volumes:
       - addlink_pg_data:/var/lib/postgresql/data
 
-  api:
+  server:
     build:
-      context: ./api
-    container_name: addlink-api
+      context: ./server
+    container_name: addlink-server
     depends_on:
       - postgres
     env_file:
-      - ./api/.env
+      - ./server/.env
     environment:
       NODE_ENV: development
       PORT: 3333
@@ -31,7 +31,7 @@ services:
       context: ./web
     container_name: addlink-web
     depends_on:
-      - api
+      - server
     ports:
       - "5173:5173"
 

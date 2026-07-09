@@ -17,10 +17,10 @@ export function ReportButton() {
     <button
       type="button"
       onClick={handleDownload}
-      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-[#020817] transition hover:border-[#ef4444] hover:text-[#ef4444]"
+      className="flex h-8 items-center gap-1.5 rounded bg-[#E4E6EC] px-2 text-xs font-semibold leading-4 text-[#4D505C] transition hover:bg-[#D8DBE4] disabled:cursor-not-allowed disabled:opacity-60"
     >
-      <Download size={18} />
-      Baixar relatorio
+      <Download size={16} />
+      Baixar CSV
     </button>
   );
 }

@@ -1,9 +1,5 @@
 import type { PropsWithChildren } from 'react';
 
 export function Card({ children }: PropsWithChildren) {
-  return (
-    <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      {children}
-    </div>
-  );
+  return <div className="rounded-lg bg-[#F9F9FB] p-8">{children}</div>;
 }

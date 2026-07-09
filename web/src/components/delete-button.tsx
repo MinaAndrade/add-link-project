@@ -47,15 +47,15 @@ export function DeleteButton({ id }: Props) {
         type="button"
         onClick={() => setIsConfirmOpen(true)}
         disabled={isPending}
-        className="rounded-lg p-2 text-[#ef4444] transition hover:bg-red-50 hover:text-red-600 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex h-8 w-8 items-center justify-center rounded bg-[#E4E6EC] text-[#1F2025] transition hover:bg-[#D8DBE4] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
         title="Excluir"
       >
-        <Trash2 size={18} />
+        <Trash2 size={16} />
       </button>
 
       {isConfirmOpen && (
-        <div className="absolute bottom-full right-0 z-30 mb-2 w-72 rounded-lg border border-slate-200 bg-white p-4 text-left shadow-xl shadow-slate-950/10">
-          <p className="text-sm font-semibold text-[#020817]">Excluir link?</p>
+        <div className="absolute bottom-full right-0 z-30 mb-2 w-72 rounded-lg border border-[#E4E6EC] bg-white p-4 text-left shadow-xl shadow-slate-950/10">
+          <p className="text-sm font-semibold text-[#1F2025]">Excluir link?</p>
 
           <p className="mt-1 text-xs leading-5 text-[#64748B]">
             Esta ação remove o link encurtado da lista.
@@ -66,7 +66,7 @@ export function DeleteButton({ id }: Props) {
               type="button"
               onClick={() => setIsConfirmOpen(false)}
               disabled={isPending}
-              className="rounded-md border border-slate-200 px-3 py-2 text-xs font-medium text-[#020817] transition hover:bg-slate-50 disabled:opacity-60"
+              className="rounded border border-[#E4E6EC] px-3 py-2 text-xs font-medium text-[#1F2025] transition hover:bg-[#F9F9FB] disabled:opacity-60"
             >
               Cancelar
             </button>
@@ -75,7 +75,7 @@ export function DeleteButton({ id }: Props) {
               type="button"
               onClick={handleDelete}
               disabled={isPending}
-              className="rounded-md bg-[#ef4444] px-3 py-2 text-xs font-medium text-white transition hover:bg-red-600 disabled:opacity-60"
+              className="rounded bg-[#B12C4D] px-3 py-2 text-xs font-medium text-white transition hover:bg-[#92243F] disabled:opacity-60"
             >
               {isPending ? 'Excluindo...' : 'Excluir'}
             </button>
@@ -84,8 +84,8 @@ export function DeleteButton({ id }: Props) {
       )}
 
       {isTooltipVisible && (
-        <div className="absolute bottom-full right-0 z-20 mb-2 flex items-center gap-2 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-[#020817] shadow-lg shadow-slate-950/10">
-          <Check size={14} className="text-[#ef4444]" />
+        <div className="absolute right-full top-1/2 z-[9999] mr-2 flex -translate-y-1/2 items-center gap-2 whitespace-nowrap rounded border border-[#E4E6EC] bg-white px-3 py-2 text-xs font-medium text-[#1F2025] shadow-lg shadow-slate-950/10">
+          <Check size={14} className="text-[#2C46B1]" />
           Link excluído
         </div>
       )}

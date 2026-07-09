@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
 import { createLink } from '../http/create-link';
@@ -34,41 +33,63 @@ export function CreateLinkForm() {
   });
 
   async function onSubmit(data: CreateLinkSchema) {
-    if (!data.originalUrl) {
+    if (!data.originalUrl || !data.shortCode) {
       return;
     }
 
     await mutateAsync({
       originalUrl: data.originalUrl,
+      shortCode: data.shortCode,
     });
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <div className="flex items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 transition focus-within:border-[#ef4444] focus-within:ring-4 focus-within:ring-red-100">
-          <Link size={18} className="shrink-0 text-[#64748B]" />
-
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <div className="space-y-4">
+        <label className="block">
+          <span className="mb-2 block text-[10px] uppercase leading-[14px] text-[#4D505C]">
+            link original
+          </span>
           <input
             {...register('originalUrl')}
-            placeholder="https://www.exemplo.com"
-            className="w-full bg-transparent text-sm text-[#020817] outline-none placeholder:text-[#64748B]"
+            placeholder="www.exemplo.com.br"
+            className="h-12 w-full rounded-lg border border-[#CDCFD5] bg-transparent px-4 text-sm leading-[18px] text-[#1F2025] outline-none transition placeholder:text-[#74798B] focus:border-[#2C46B1] focus:ring-4 focus:ring-[#2C46B1]/10"
           />
-        </div>
 
-        {errors.originalUrl && (
-          <p className="mt-2 text-sm text-[#ef4444]">
-            {errors.originalUrl.message}
-          </p>
-        )}
+          {errors.originalUrl && (
+            <p className="mt-2 text-xs text-[#B12C4D]">
+              {errors.originalUrl.message}
+            </p>
+          )}
+        </label>
+
+        <label className="block">
+          <span className="mb-2 block text-[10px] uppercase leading-[14px] text-[#4D505C]">
+            link encurtado
+          </span>
+          <div className="flex h-12 w-full items-center rounded-lg border border-[#CDCFD5] bg-transparent px-4 text-sm leading-[18px] text-[#1F2025] transition focus-within:border-[#2C46B1] focus-within:ring-4 focus-within:ring-[#2C46B1]/10">
+            <span className="shrink-0 text-[#74798B]">brev.ly/</span>
+            <input
+              {...register('shortCode')}
+              placeholder="meu-link"
+              className="min-w-0 flex-1 bg-transparent text-sm leading-[18px] text-[#1F2025] outline-none placeholder:text-[#74798B]"
+            />
+          </div>
+
+          {errors.shortCode && (
+            <p className="mt-2 text-xs text-[#B12C4D]">
+              {errors.shortCode.message}
+            </p>
+          )}
+        </label>
       </div>
 
       <button
         type="submit"
         disabled={isPending}
-        className="w-full rounded-lg bg-[#ef4444] py-3 font-medium text-white transition hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-70"
+        className="h-12 w-full rounded-lg bg-[#2C46B1] text-sm font-semibold leading-[18px] text-white transition hover:bg-[#253E9D] disabled:cursor-not-allowed disabled:bg-[#2C46B1]/50"
       >
-        {isPending ? 'Encurtando...' : 'Criar link curto'}
+        {isPending ? 'Salvando...' : 'Salvar link'}
       </button>
     </form>
   );
