@@ -33,20 +33,20 @@ export function LinksTable() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[102px] justify-center border-t border-[#E4E6EC] py-10">
-        <p className="text-sm text-[#74798B]">Carregando links...</p>
+      <div className="flex min-h-[102px] justify-center border-t border-border-subtle py-10">
+        <p className="text-sm text-content-muted">Carregando links...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="border-t border-[#E4E6EC] bg-[#F8EDEF] p-6 text-center">
-        <p className="font-semibold text-[#B12C4D]">
+      <div className="border-t border-border-subtle bg-surface-danger p-6 text-center">
+        <p className="font-semibold text-danger">
           Nao foi possivel carregar os links.
         </p>
 
-        <p className="mt-2 text-sm text-[#4D505C]">
+        <p className="mt-2 text-sm text-content-body">
           Verifique se a API esta em execucao.
         </p>
 
@@ -54,7 +54,7 @@ export function LinksTable() {
           type="button"
           onClick={() => refetch()}
           disabled={isFetching}
-          className="mx-auto mt-4 flex h-8 items-center gap-1.5 rounded bg-[#E4E6EC] px-3 text-xs font-semibold leading-4 text-[#4D505C] transition hover:bg-[#D8DBE4] disabled:cursor-not-allowed disabled:opacity-60"
+          className="mx-auto mt-4 flex h-8 items-center gap-1.5 rounded bg-surface-canvas px-3 text-xs font-semibold leading-4 text-content-body transition hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           <RefreshCw size={16} className={isFetching ? 'animate-spin' : ''} />
           {isFetching ? 'Tentando...' : 'Tentar novamente'}
@@ -68,18 +68,19 @@ export function LinksTable() {
   }
 
   return (
-    <div className="max-h-[280px] overflow-y-auto border-t border-[#E4E6EC]">
+    <div className="max-h-[280px] overflow-y-auto border-t border-border-subtle">
       {data.map(link => (
+        // `id` identifies the database record for mutations; `shortCode` is the public route used for navigation/copying.
         <div
           key={link.id}
-          className="grid gap-3 border-b border-[#E4E6EC] py-4 last:border-b-0 sm:grid-cols-[minmax(0,347px)_61px_68px] sm:items-center sm:gap-5"
+          className="grid grid-cols-1 gap-3 border-b border-border-subtle py-4 last:border-b-0 sm:grid-cols-[minmax(0,347px)_61px_68px] sm:items-center sm:gap-5"
         >
           <div className="min-w-0 space-y-1">
             <a
               href={getFrontendUrl(link.shortCode)}
               target="_blank"
               rel="noreferrer"
-              className="block truncate text-sm font-semibold leading-[18px] text-[#2C46B1] hover:underline"
+              className="block truncate text-sm font-semibold leading-[18px] text-brand hover:underline"
             >
               brev.ly/{link.shortCode}
             </a>
@@ -88,13 +89,13 @@ export function LinksTable() {
               href={link.originalUrl}
               target="_blank"
               rel="noreferrer"
-              className="block truncate text-xs leading-4 text-[#4D505C] hover:text-[#2C46B1]"
+              className="block truncate text-xs leading-4 text-content-body hover:text-brand"
             >
               {getDisplayUrl(link.originalUrl)}
             </a>
           </div>
 
-          <span className="text-xs leading-4 text-[#4D505C] sm:text-right">
+          <span className="text-xs leading-4 text-content-body sm:text-right">
             {getAccessLabel(link.accessCount)}
           </span>
 

@@ -46,43 +46,46 @@ export function CreateLinkForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="space-y-4">
-        <label className="block">
-          <span className="mb-2 block text-[10px] uppercase leading-[14px] text-[#4D505C]">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-full flex-col gap-6"
+    >
+      <div className="flex w-full flex-col gap-4">
+        <label className="flex w-full flex-col">
+          <span className="mb-2 block text-[10px] uppercase leading-[14px] text-content-body">
             link original
           </span>
           <input
             {...register('originalUrl')}
             placeholder="www.exemplo.com.br"
-            className="h-12 w-full rounded-lg border border-[#CDCFD5] bg-transparent px-4 text-sm leading-[18px] text-[#1F2025] outline-none transition placeholder:text-[#74798B] focus:border-[#2C46B1] focus:ring-4 focus:ring-[#2C46B1]/10"
+            className="h-12 w-full rounded-lg border border-border-input bg-transparent px-4 text-sm leading-[18px] text-content-strong outline-none transition placeholder:text-content-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
           />
 
           {errors.originalUrl && (
-            <p className="mt-2 text-xs text-[#B12C4D]">
+            <p className="mt-2 text-xs text-danger">
               {errors.originalUrl.message}
             </p>
           )}
         </label>
 
-        <label className="block">
+        <label className="flex w-full flex-col">
           <span
             className={`mb-2 block text-[10px] uppercase leading-[14px] ${
-              hasShortCodeError ? 'text-[#B12C4D]' : 'text-[#4D505C]'
+              hasShortCodeError ? 'text-danger' : 'text-content-body'
             }`}
           >
             link encurtado
           </span>
           <div
-            className={`flex h-12 w-full items-center rounded-lg border bg-transparent px-4 text-sm leading-[18px] text-[#1F2025] transition ${
+            className={`flex h-12 w-full items-center rounded-lg border bg-transparent px-4 text-sm leading-[18px] text-content-strong transition ${
               hasShortCodeError
-                ? 'border-[#B12C4D] bg-[#F8EDEF] focus-within:ring-4 focus-within:ring-[#B12C4D]/10'
-                : 'border-[#CDCFD5] focus-within:border-[#2C46B1] focus-within:ring-4 focus-within:ring-[#2C46B1]/10'
+                ? 'border-danger bg-surface-danger focus-within:ring-4 focus-within:ring-danger/10'
+                : 'border-border-input focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/10'
             }`}
           >
             <span
               className={`shrink-0 ${
-                hasShortCodeError ? 'text-[#B12C4D]' : 'text-[#74798B]'
+                hasShortCodeError ? 'text-danger' : 'text-content-muted'
               }`}
             >
               brev.ly/
@@ -91,12 +94,12 @@ export function CreateLinkForm() {
               {...register('shortCode')}
               aria-invalid={hasShortCodeError}
               placeholder="meu-link"
-              className="min-w-0 flex-1 bg-transparent text-sm leading-[18px] text-[#1F2025] outline-none placeholder:text-[#74798B]"
+              className="min-w-0 flex-1 bg-transparent text-sm leading-[18px] text-content-strong outline-none placeholder:text-content-muted"
             />
           </div>
 
           {errors.shortCode && (
-            <p className="mt-2 flex items-center gap-1.5 text-xs text-[#B12C4D]">
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-danger">
               <AlertCircle size={14} className="shrink-0" />
               {errors.shortCode.message}
             </p>
@@ -107,7 +110,7 @@ export function CreateLinkForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="h-12 w-full rounded-lg bg-[#2C46B1] text-sm font-semibold leading-[18px] text-white transition hover:bg-[#253E9D] disabled:cursor-not-allowed disabled:bg-[#2C46B1]/50"
+        className="h-12 w-full rounded-lg bg-brand text-sm font-semibold leading-[18px] text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:bg-brand/50"
       >
         {isPending ? 'Salvando...' : 'Salvar link'}
       </button>
