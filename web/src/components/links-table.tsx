@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { RefreshCw } from 'lucide-react';
 
 import { fetchLinks } from '../http/fetch-links';
 import { getFrontendUrl } from '../lib/frontend-url';
@@ -22,7 +23,9 @@ export function LinksTable() {
   const {
     data = [],
     isLoading,
+    isFetching,
     error,
+    refetch,
   } = useQuery({
     queryKey: ['links'],
     queryFn: fetchLinks,
@@ -46,6 +49,16 @@ export function LinksTable() {
         <p className="mt-2 text-sm text-[#4D505C]">
           Verifique se a API esta em execucao.
         </p>
+
+        <button
+          type="button"
+          onClick={() => refetch()}
+          disabled={isFetching}
+          className="mx-auto mt-4 flex h-8 items-center gap-1.5 rounded bg-[#E4E6EC] px-3 text-xs font-semibold leading-4 text-[#4D505C] transition hover:bg-[#D8DBE4] disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <RefreshCw size={16} className={isFetching ? 'animate-spin' : ''} />
+          {isFetching ? 'Tentando...' : 'Tentar novamente'}
+        </button>
       </div>
     );
   }
