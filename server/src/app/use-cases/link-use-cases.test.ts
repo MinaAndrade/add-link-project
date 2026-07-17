@@ -90,9 +90,9 @@ describe('link use cases', () => {
   it('rejects an invalid original url', async () => {
     const useCase = new CreateLinkUseCase(repository);
 
-    await expect(useCase.execute('example.com', 'example')).rejects.toBeInstanceOf(
-      InvalidUrlError
-    );
+    await expect(
+      useCase.execute('example.com', 'example')
+    ).rejects.toBeInstanceOf(InvalidUrlError);
   });
 
   it('rejects an invalid short code', async () => {

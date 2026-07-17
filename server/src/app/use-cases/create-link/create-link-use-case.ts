@@ -23,9 +23,8 @@ export class CreateLinkUseCase {
       throw new InvalidShortCodeError();
     }
 
-    const linkWithSameShortCode = await this.repository.findByShortCode(
-      shortCode
-    );
+    const linkWithSameShortCode =
+      await this.repository.findByShortCode(shortCode);
 
     if (linkWithSameShortCode) {
       throw new ShortCodeAlreadyExistsError();
