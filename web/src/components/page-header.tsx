@@ -1,6 +1,6 @@
 export function PageHeader() {
   return (
-    <header className="flex h-6 gap-4 items-center">
+    <header className="flex h-6 items-center justify-center gap-4 lg:justify-start">
       <img
         alt="brev.ly"
         loading="lazy"
@@ -9,7 +9,7 @@ export function PageHeader() {
         decoding="async"
         src="/meta/brevly-logo.svg"
       />
-      <div className="justify-center text-blue-800 text-lg font-bold font-['Quicksand']">
+      <div className="justify-center font-brand text-lg font-bold text-brand">
         brev.ly
       </div>
     </header>

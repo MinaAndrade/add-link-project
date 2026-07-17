@@ -7,7 +7,7 @@ export function LinksCard() {
     <Card>
       <div className="flex flex-col gap-5">
         <div className="flex min-h-8 items-center justify-between gap-4">
-          <h2 className="text-lg font-bold leading-6 text-[#1F2025]">
+          <h2 className="text-lg font-bold leading-6 text-content-strong">
             Meus links
           </h2>
 
