@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { RefreshCw } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
 import { fetchLinks } from '../http/fetch-links';
 import { getFrontendUrl } from '../lib/frontend-url';
@@ -19,6 +20,43 @@ function getAccessLabel(accessCount: number) {
   return `${accessCount} ${accessCount === 1 ? 'acesso' : 'acessos'}`;
 }
 
+function AccessCount({ accessCount }: { accessCount: number }) {
+  const previousCount = useRef(accessCount);
+  const [isIncremented, setIsIncremented] = useState(false);
+
+  useEffect(() => {
+    if (accessCount <= previousCount.current) {
+      previousCount.current = accessCount;
+      return;
+    }
+
+    setIsIncremented(true);
+    previousCount.current = accessCount;
+
+    const timeoutId = window.setTimeout(() => {
+      setIsIncremented(false);
+    }, 900);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [accessCount]);
+
+  return (
+    <span
+      className={`w-fit whitespace-nowrap rounded text-xs leading-4 transition sm:ml-auto sm:text-right ${
+        isIncremented
+          ? 'bg-brand/10 px-1.5 py-1 text-brand ring-1 ring-brand/20'
+          : 'text-content-body'
+      }`}
+    >
+      {getAccessLabel(accessCount)}
+    </span>
+  );
+}
+
+/**
+ * Renders stored links. Use `id` for record mutations and `shortCode` for the
+ * public URL segment used in navigation, display, and copy actions.
+ */
 export function LinksTable() {
   const {
     data = [],
@@ -43,11 +81,11 @@ export function LinksTable() {
     return (
       <div className="border-t border-border-subtle bg-surface-danger p-6 text-center">
         <p className="font-semibold text-danger">
-          Nao foi possivel carregar os links.
+          Não foi possível carregar os links.
         </p>
 
         <p className="mt-2 text-sm text-content-body">
-          Verifique se a API esta em execucao.
+          Verifique se a API está em execução.
         </p>
 
         <button
@@ -68,12 +106,11 @@ export function LinksTable() {
   }
 
   return (
-    <div className="max-h-[280px] overflow-y-auto border-t border-border-subtle">
+    <div className="max-h-list-max overflow-y-auto border-t border-border-subtle">
       {data.map(link => (
-        // `id` identifies the database record for mutations; `shortCode` is the public route used for navigation/copying.
         <div
           key={link.id}
-          className="grid grid-cols-1 gap-3 border-b border-border-subtle py-4 last:border-b-0 sm:grid-cols-[minmax(0,347px)_61px_68px] sm:items-center sm:gap-5"
+          className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-4 border-b border-border-subtle py-3 last:border-b-0 sm:grid-cols-[minmax(0,347px)_61px_68px] sm:gap-5 sm:py-4"
         >
           <div className="min-w-0 space-y-1">
             <a
@@ -95,9 +132,7 @@ export function LinksTable() {
             </a>
           </div>
 
-          <span className="text-xs leading-4 text-content-body sm:text-right">
-            {getAccessLabel(link.accessCount)}
-          </span>
+          <AccessCount accessCount={link.accessCount} />
 
           <div className="flex gap-1">
             <CopyButton shortCode={link.shortCode} />

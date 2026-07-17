@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { AlertCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 
@@ -16,10 +17,14 @@ export function CreateLinkForm() {
     register,
     handleSubmit,
     reset,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<CreateLinkSchema>({
     resolver: zodResolver(createLinkSchema),
+    mode: 'onChange',
   });
+  const hasOriginalUrlError = Boolean(errors.originalUrl);
   const hasShortCodeError = Boolean(errors.shortCode);
 
   const { mutateAsync, isPending } = useMutation({
@@ -39,30 +44,59 @@ export function CreateLinkForm() {
       return;
     }
 
-    await mutateAsync({
-      originalUrl: data.originalUrl,
-      shortCode: data.shortCode,
-    });
+    try {
+      await mutateAsync({
+        originalUrl: data.originalUrl,
+        shortCode: data.shortCode,
+      });
+    } catch (error) {
+      if (isAxiosError(error) && error.response?.status === 409) {
+        setError(
+          'shortCode',
+          {
+            type: 'server',
+            message: 'Este link encurtado já está em uso.',
+          },
+          {
+            shouldFocus: true,
+          }
+        );
+
+        return;
+      }
+
+      throw error;
+    }
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex w-full flex-col gap-6"
+      className="flex w-full flex-col gap-5 sm:gap-6"
     >
       <div className="flex w-full flex-col gap-4">
         <label className="flex w-full flex-col">
-          <span className="mb-2 block text-[10px] uppercase leading-[14px] text-content-body">
+          <span
+            className={`mb-2 block text-[10px] uppercase leading-[14px] ${
+              hasOriginalUrlError ? 'text-danger' : 'text-content-body'
+            }`}
+          >
             link original
           </span>
           <input
             {...register('originalUrl')}
+            aria-invalid={hasOriginalUrlError}
             placeholder="www.exemplo.com.br"
-            className="h-12 w-full rounded-lg border border-border-input bg-transparent px-4 text-sm leading-[18px] text-content-strong outline-none transition placeholder:text-content-muted focus:border-brand focus:ring-4 focus:ring-brand/10"
+            className={`h-12 w-full rounded-lg border bg-transparent px-4 text-sm leading-[18px] text-content-strong outline-none transition placeholder:text-content-muted ${
+              hasOriginalUrlError
+                ? 'border-danger bg-surface-danger focus:ring-4 focus:ring-danger/10'
+                : 'border-border-input focus:border-brand focus:ring-4 focus:ring-brand/10'
+            }`}
           />
 
           {errors.originalUrl && (
-            <p className="mt-2 text-xs text-danger">
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-danger">
+              <AlertCircle size={14} className="shrink-0" />
               {errors.originalUrl.message}
             </p>
           )}
@@ -91,9 +125,10 @@ export function CreateLinkForm() {
               brev.ly/
             </span>
             <input
-              {...register('shortCode')}
+              {...register('shortCode', {
+                onChange: () => clearErrors('shortCode'),
+              })}
               aria-invalid={hasShortCodeError}
-              placeholder="meu-link"
               className="min-w-0 flex-1 bg-transparent text-sm leading-[18px] text-content-strong outline-none placeholder:text-content-muted"
             />
           </div>
