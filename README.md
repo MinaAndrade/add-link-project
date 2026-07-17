@@ -1,12 +1,15 @@
 # Brev.ly - Encurtador de Links
 
-Aplicação fullstack desenvolvida para o desafio da pós-graduação Brev.ly. O projeto permite cadastrar, listar e remover links encurtados, redirecionar o codigo curto para a URL original, contabilizar acessos e gerar relatórios CSV enviados para o Cloudflare R2.
+Aplicação fullstack para cadastrar, listar, remover e redirecionar links encurtados. O projeto também contabiliza acessos, gera relatórios CSV e mantém os tokens visuais centralizados no frontend.
 
 ## Funcionalidades
 
 - Cadastro de links a partir de uma URL original.
+- Validação visual dos campos do formulário.
+- Validação para impedir código encurtado duplicado.
 - Listagem dos links cadastrados.
-- Remoção de links.
+- Cópia do link encurtado para a área de transferência.
+- Remoção de links com confirmação.
 - Redirecionamento por código curto.
 - Contabilização de acessos por link.
 - Geração de relatório CSV com upload para Cloudflare R2.
@@ -56,17 +59,7 @@ projeto_addLink/
 |   |-- scripts/
 |   |-- src/
 |   |   |-- app/
-|   |   |   |-- entities/
-|   |   |   |-- errors/
-|   |   |   |-- repositories/
-|   |   |   |-- storage/
-|   |   |   `-- use-cases/
 |   |   |-- infra/
-|   |   |   |-- db/
-|   |   |   |-- http/
-|   |   |   |-- repositories/
-|   |   |   |-- storage/
-|   |   |   `-- terraform/
 |   |   `-- shared/
 |   |-- Dockerfile
 |   `-- package.json
@@ -77,11 +70,19 @@ projeto_addLink/
 |   |   |-- lib/
 |   |   |-- pages/
 |   |   `-- types/
+|   |-- STYLEGUIDE.md
+|   |-- tailwind.config.js
 |   |-- Dockerfile
 |   `-- package.json
 |-- docker-compose.yml
 `-- README.md
 ```
+
+## Design e Tema
+
+Os tokens de cor, fonte e espaçamento ficam centralizados em `web/tailwind.config.js`. As decisões de design e os principais padrões de componentes ficam documentados em `web/STYLEGUIDE.md`.
+
+O projeto não mantém rotas internas de `/style-guide` no app final, para evitar duplicidade entre documentação visual e código de produto.
 
 ## Pré-requisitos
 
@@ -99,7 +100,7 @@ docker -v
 docker compose version
 ```
 
-## Variaveis de ambiente
+## Variáveis de Ambiente
 
 Crie o arquivo do backend a partir do exemplo:
 
@@ -127,7 +128,7 @@ CLOUDFLARE_BUCKET=""
 CLOUDFLARE_PUBLIC_URL="https://pub-example.r2.dev"
 ```
 
-Crie também o arquivo do frontend, se precisar customizar a URL da API:
+Crie também o arquivo do frontend, se precisar customizar as URLs:
 
 ```bash
 cp web/.env.example web/.env
@@ -147,12 +148,6 @@ Na raiz do projeto:
 ```bash
 docker compose up --build
 ```
-
-Os serviços esperados são:
-
-- `addlink-postgres`
-- `addlink-server`
-- `addlink-web`
 
 Depois que os containers estiverem ativos, execute as migrations:
 
@@ -174,9 +169,9 @@ Para parar os containers sem apagar os dados:
 docker compose down
 ```
 
-Evite usar `docker compose down -v` se quiser preservar o banco, pois esse comando remove os volumes.
+Evite usar `docker compose down -v` se quiser preservar o banco.
 
-## Executando localmente
+## Executando Localmente
 
 Suba apenas o PostgreSQL:
 
@@ -201,17 +196,9 @@ pnpm install
 pnpm dev
 ```
 
-Acesse:
+## Endpoints Principais
 
-```txt
-Frontend: http://localhost:5173
-API:      http://127.0.0.1:3333
-Swagger:  http://127.0.0.1:3333/docs
-```
-
-## Endpoints principais
-
-| Método | Rota | Descricao |
+| Método | Rota | Descrição |
 | --- | --- | --- |
 | `POST` | `/links` | Cria um link encurtado |
 | `GET` | `/links` | Lista os links cadastrados |
@@ -221,7 +208,7 @@ Swagger:  http://127.0.0.1:3333/docs
 
 Observação: a rota `GET /:shortCode` deve ser testada diretamente no navegador. O "Try it out" do Swagger pode falhar por CORS ao seguir redirects externos.
 
-## Testes e qualidade
+## Testes e Qualidade
 
 Backend:
 
@@ -230,7 +217,13 @@ cd server
 pnpm test
 ```
 
-O fluxo de testes cria o banco `addlink_test` quando necessário, executa as migrations e roda o Vitest.
+Frontend:
+
+```bash
+cd web
+pnpm build
+pnpm lint
+```
 
 Comandos úteis da API:
 
@@ -255,9 +248,9 @@ pnpm format
 pnpm preview
 ```
 
-## Banco de dados
+## Banco de Dados
 
-O projeto usa PostgreSQL com Drizzle ORM. A tabela principal e `links`, com os campos:
+O projeto usa PostgreSQL com Drizzle ORM. A tabela principal é `links`, com os campos:
 
 - `id`
 - `original_url`
@@ -279,7 +272,7 @@ pnpm db:generate
 pnpm db:migrate
 ```
 
-## Relatorios e Cloudflare R2
+## Relatórios e Cloudflare R2
 
 A rota `GET /links/report` gera um CSV com os links cadastrados, envia o arquivo para o Cloudflare R2 e retorna uma URL pública:
 
@@ -299,21 +292,13 @@ CLOUDFLARE_BUCKET=""
 CLOUDFLARE_PUBLIC_URL=""
 ```
 
-## Infraestrutura como código
+## Infraestrutura como Código
 
 A configuração Terraform fica em:
 
 ```txt
 server/src/infra/terraform
 ```
-
-Arquivos principais:
-
-- `providers.tf`
-- `variables.tf`
-- `main.tf`
-- `outputs.tf`
-- `terraform.tfvars.example`
 
 Fluxo básico:
 
@@ -326,24 +311,14 @@ terraform plan
 
 O arquivo `terraform.tfvars` deve conter valores reais apenas no ambiente local e não deve ser commitado.
 
-Arquivos que não devem ir para o repositório:
-
-```txt
-server/src/infra/terraform/.terraform/
-server/src/infra/terraform/.terraform.lock.hcl
-server/src/infra/terraform/terraform.tfstate
-server/src/infra/terraform/terraform.tfstate.backup
-server/src/infra/terraform/terraform.tfvars
-```
-
-## Observações de segurança
+## Segurança
 
 - Nunca commite arquivos `.env`.
 - Nunca commite `terraform.tfvars` com tokens reais.
 - Nunca commite `terraform.tfstate`, pois ele pode conter dados sensíveis da infraestrutura.
 - Caso um token tenha sido versionado por engano, revogue-o e gere uma nova credencial.
 
-## Solução de problemas
+## Solução de Problemas
 
 Porta ocupada:
 
@@ -359,9 +334,9 @@ Docker não conecta ao daemon:
 permission denied while trying to connect to the docker API
 ```
 
-Verifique se o Docker Desktop esta aberto e se o terminal esta rodando com permissão para acessar o Docker.
+Verifique se o Docker Desktop está aberto e se o terminal está rodando com permissão para acessar o Docker.
 
-Banco sem dados apos reiniciar:
+Banco sem dados após reiniciar:
 
 - `docker compose down` preserva os dados.
 - `docker compose down -v` remove os volumes e apaga os dados.
@@ -372,17 +347,4 @@ Use `127.0.0.1` para acessar a API:
 
 ```txt
 http://127.0.0.1:3333
-```
-
-## Status de validação
-
-Durante a revisão do projeto, foram validados:
-
-```txt
-API TypeScript
-API build
-Testes unitários da API
-Frontend TypeScript
-Frontend build
-Docker Compose config
 ```

@@ -21,12 +21,23 @@ export default {
         },
         brand: {
           DEFAULT: '#2C46B1',
-          hover: '#253E9D',
+          dark: '#2C4091',
+          hover: '#2C4091',
         },
         danger: {
           DEFAULT: '#B12C4D',
           hover: '#92243F',
         },
+      },
+      fontFamily: {
+        sans: ['Open Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        brand: ['Quicksand', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
+      spacing: {
+        card: '2rem',
+        control: '3rem',
+        'list-max': '17.5rem',
+        'desktop-x': '14.1%',
       },
     },
   },
