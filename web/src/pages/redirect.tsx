@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { getApiUrl } from '../lib/api-url';
 import type { ShortCode } from '../types/link';
@@ -14,33 +14,44 @@ function LogoIcon() {
 }
 
 export function RedirectPage({ shortCode }: RedirectPageProps) {
+  const hasResolvedRedirect = useRef(false);
   const [status, setStatus] = useState<'loading' | 'not-found' | 'error'>(
     'loading'
   );
 
-  const redirectUrl = getApiUrl(shortCode);
+  const resolveUrl = getApiUrl(`/links/${shortCode}/resolve`);
 
   useEffect(() => {
     async function redirect() {
+      if (hasResolvedRedirect.current) {
+        return;
+      }
+
+      hasResolvedRedirect.current = true;
+
       try {
-        const response = await fetch(redirectUrl, {
-          method: 'GET',
-          redirect: 'manual',
-        });
+        const response = await fetch(resolveUrl);
 
         if (response.status === 404) {
           setStatus('not-found');
           return;
         }
 
-        window.location.replace(redirectUrl);
+        if (!response.ok) {
+          setStatus('error');
+          return;
+        }
+
+        const data = (await response.json()) as { originalUrl: string };
+
+        window.location.replace(data.originalUrl);
       } catch {
         setStatus('error');
       }
     }
 
     redirect();
-  }, [redirectUrl]);
+  }, [resolveUrl]);
 
   if (status === 'not-found') {
     return <NotFoundPage />;
@@ -62,13 +73,6 @@ export function RedirectPage({ shortCode }: RedirectPageProps) {
             {status === 'error'
               ? 'Verifique se a API está em execução e tente novamente.'
               : 'O link será aberto automaticamente em alguns instantes.'}
-          </p>
-
-          <p className="self-stretch text-center font-sans text-sm font-semibold leading-[18px] text-content-body">
-            Não foi redirecionado?{' '}
-            <a href={redirectUrl} className="text-brand underline">
-              Acesse aqui
-            </a>
           </p>
         </div>
       </section>

@@ -135,6 +135,36 @@ describe('HTTP routes', () => {
     expect(response.headers.location).toBe('https://example.com');
   });
 
+  it('resolves short code to original url and increments access count once', async () => {
+    const createResponse = await app.inject({
+      method: 'POST',
+      url: '/links',
+      payload: {
+        originalUrl: 'https://example.com',
+        shortCode: 'example',
+      },
+    });
+
+    const createdLink = createResponse.json();
+
+    const response = await app.inject({
+      method: 'GET',
+      url: `/links/${createdLink.shortCode}/resolve`,
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.json()).toEqual({
+      originalUrl: 'https://example.com',
+    });
+
+    const listResponse = await app.inject({
+      method: 'GET',
+      url: '/links',
+    });
+
+    expect(listResponse.json()[0].accessCount).toBe(1);
+  });
+
   it('returns 404 when short code does not exist', async () => {
     const response = await app.inject({
       method: 'GET',
